@@ -1,0 +1,261 @@
+@import url('https://fonts.googleapis.com/css2?family=Noto+Sans+TC:wght@400;900&display=swap');
+
+* {
+    font-family: 'Noto Sans TC';
+}
+
+.banner {
+    display: none;
+}
+
+.icon,
+.icons {
+    width: 200px;
+}
+
+.icondark {
+    width: 300px;
+}
+
+h1,
+h2,
+h3,
+h4,
+h5,
+h6 {
+    font-weight: 900;
+}
+
+body {
+    background-color: #8fd6e1;
+}
+
+.navs {
+    background-color: #126e82;
+    color: white;
+    text-align: center;
+}
+
+.navs h1 {
+    display: inline-block;
+    position: relative;
+    top: 7px;
+    left: 15px;
+}
+
+.icon {
+    position: relative;
+    right: 15px;
+}
+
+@media only screen and (max-width: 420px) {
+    #didyouknowdesc {
+        padding: 0 5%;
+    }
+    .navs h1 {
+        display: block;
+        position: static;
+        padding-bottom: 15px;
+    }
+
+    .icon {
+        position: static;
+        display: block;
+        margin-left: auto;
+        margin-right: auto;
+    }
+
+    .buttonSum {
+        margin-bottom: 15px;
+    }
+}
+
+@media only screen and (min-width: 420px) {
+    #didyouknowdesc {
+        padding: 0 20%;
+    }
+}
+
+#didyouknowdesc {
+    width: 100%;
+    text-align: center;
+    margin-bottom: 40px;
+}
+
+@media only screen and (max-height: 600px) {
+    .navs {
+        display: none;
+    }
+}
+
+
+.content {
+    color: #126e82
+}
+
+.content {
+    position: absolute;
+    width: 100%;
+    text-align: center;
+    top: 50%;
+    left: 50%;
+    transform: translate(-50%, -50%);
+
+}
+
+.contentparent {
+    position: relative;
+}
+
+@media only screen and (max-width: 992px) {
+
+.height350ifsmall {
+    height: 520px;
+}
+}
+
+
+.score,
+.question,
+.getready {
+    display: none;
+}
+
+.getready h1 {
+    font-size: 50px;
+}
+
+.getready p {
+    font-size: 20px;
+}
+
+.buttons {
+    background-color: #126e82;
+    /* Green */
+    color: white;
+    padding: 15px 32px;
+    text-align: center;
+    text-decoration: none;
+    display: inline-block;
+    font-size: 25px;
+    border-radius: 10px;
+}
+
+.buttonsBorder {
+    border-color: #126e82
+}
+
+.question p {
+    font-size: 20px;
+    margin-bottom: 0;
+}
+
+.question h1 {
+    font-size: 70px;
+}
+
+.answer {
+    border: none;
+    background-color: #126e82;
+    color: white;
+    text-align: center;
+    font-size: 40px;
+    font-weight: 900;
+    width: 80%
+}
+
+@media only screen and (min-width: 550px) {
+    .answer {
+        width: 500px;
+    }
+}
+
+.row {
+    width: 100%;
+}
+
+.roundedmenu {
+    background-color: #126e82;
+    width: 90%;
+    color: white;
+    border-radius: 20px;
+    padding: 15px;
+
+
+    /* display: table;
+  margin: 0 auto; */
+}
+
+.roundedmenuparent {
+    margin-bottom: 20px;
+    display: flex;
+  justify-content: center;
+  align-items: center;
+
+}
+
+.disabled {
+    background-color: gray;
+}
+
+.menurow {
+    position: relative;
+    margin: 0
+}
+
+.block {
+    display: block;
+}
+
+.shuffle {
+    width: 90%;
+    display: table;
+  margin: 0 auto;
+}
+
+@media (max-width:992px) and (min-width:600px) {
+    .height350ifsmall {
+        height: 570px;
+    }
+}
+
+@media (min-width:992px) {
+    .height350ifsmall {
+        height: 400px;
+    }
+}
+
+.credit {
+    color: #126e82;
+    font-weight: 900;
+
+    text-align: center;
+    width: 100%;
+    margin-top: 20px;
+}
+
+/* .height350ifsmall,
+.contentparent {
+    display: none;
+} */
+
+.menuchose {
+    display: none;
+    border-radius: 15px;
+    background-color: #126e82;
+    width: 80%;
+    color: white;
+}
+
+.typer {
+    font-weight: 900;
+    font-size: 30px;
+    color: #126e82;
+    text-align: center;
+    margin-bottom: 15px;
+}
+
+#didyouknow,
+#didyouknowdesc {
+    visibility: hidden;
+}
