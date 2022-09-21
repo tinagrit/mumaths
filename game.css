@@ -1,0 +1,121 @@
+body {
+    overflow: hidden;
+}
+
+#app {
+    margin-top: 0;
+}
+
+#in {
+    z-index: 99;
+}
+
+.getready,
+.question,
+.score {
+    opacity: 0;
+    transition: opacity 0.5s;
+}
+
+.getready h1 {
+    font-size: 35px;
+}
+
+.getready p {
+    font-size: 20px;
+}
+
+.buttons {
+    background-color: #126e82;
+    /* Green */
+    color: white;
+    padding: 15px 32px;
+    text-align: center;
+    text-decoration: none;
+    display: inline-block;
+    font-size: 25px;
+    border-radius: 10px;
+    cursor: pointer;
+}
+
+.getready,
+.question {
+    text-align: center;
+    height: 100vh;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    color: #126e82;
+}
+
+.question p {
+    font-size: 25px;
+}
+
+.question h1 {
+    font-size: 50px;
+    text-align: right;
+}
+
+.question hr {
+    border: 1px solid #126e82;
+    margin: 0 auto 15px auto;
+    max-width: 200px;
+    width: 100%;
+}
+
+.question .symbol {
+    position: absolute;
+    top: 50%;
+    right: -30px;
+    font-size: 30px;
+    font-weight: bold;
+    transform: translateY(-50%);
+}
+
+.question .nums {
+    margin: 10px 0;
+    position: relative;
+
+}
+
+.question input {
+    background-color: white;
+    color: #126e82;
+    font-weight: bold;
+    font-size: 50px;
+    border: none;
+    outline: none;
+    max-width: 200px;
+    text-align: center;
+    width: 100%;
+}
+
+.score {
+    text-align: center;
+}
+
+.score h1,
+.score h2 {
+    color: #126e82;
+}
+
+.score .buttonEnd {
+    margin-bottom: 10px;
+}
+
+.colorex {
+    color: black;
+}
+
+.question,
+.score {
+    display: none;
+}
+
+
+
+.showondiv {
+    display: none;
+}
