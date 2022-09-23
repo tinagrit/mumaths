@@ -1,5 +1,7 @@
 body {
     background-color: #8fd6e1;
+    overflow: auto;
+    overflow-x: hidden;
 }
 
 .row>* {
@@ -60,6 +62,37 @@ body {
     color: white;
 }
 
+.faicon {
+    width: 20px;
+    display: inline-block;
+    text-align: center;
+    vertical-align: middle;
+}
+
+.faicon.shuffleicon {
+    width: 30px;
+}
+
+.faicon.tinyicons {
+    width: 1rem;
+    margin-right: 5px;
+    filter: invert(20%) sepia(67%) saturate(6172%) hue-rotate(179deg) brightness(87%) contrast(86%);
+}
+
+.faicon.buttonicons {
+    filter: invert(93%) sepia(0%) saturate(0%) hue-rotate(247deg) brightness(107%) contrast(106%);
+}
+
+.faicon.buttonicons.endingicons {
+    bottom: 2px;
+    position: relative;
+    margin-right: 8px;
+}
+
+.typeblock.active .faicon.shuffleicon {
+    filter: invert(93%) sepia(0%) saturate(0%) hue-rotate(247deg) brightness(107%) contrast(106%);
+}
+
 .config {
     background-color:#126e82;
     color: white;
@@ -72,14 +105,18 @@ body {
     display: block;
     width: 90%;
     margin: 5px auto 0 auto;
+    font-size: 28px;
 }
 
 .config hr {
     margin-bottom: 10px;
 }
 
-.config h2 {
+.config h2,
+.config label.h2 {
     text-transform: uppercase;
+    font-size: 20px;
+    font-weight: bold;
 }
 
 .config .group {
@@ -89,12 +126,18 @@ body {
     position: relative;
 }
 
-.config .group.negative {
+.config .group.autochange {
     margin-top: 20px;
+}
+
+.config .group.negative {
+    margin-top: 8px;
     display: none;
 }
 
-.config .group.negative h2 {
+.config .group.negative h2,
+.config .group.autochange h2 {
+    font-size: 18px;
     display: inline;
 }
 
@@ -107,11 +150,15 @@ body {
     margin-top: 4px;
     box-sizing: border-box;
     width: 100%;
+    border: none;
+    color: #000000;
+    background-color: #FFFFFF;
 }
 
-.config #negative {
-    height: 25px;
-    width: 25px;
+.config #negative,
+.config #autochange {
+    height: 18px;
+    width: 18px;
     margin-right: 5px;
     position: relative;
     top: 3px;
@@ -123,7 +170,6 @@ body {
 }
 
 .row.start .startblock {
-    display: block;
     border: none;
     width: 100%;
     box-sizing: border-box;
@@ -133,6 +179,11 @@ body {
     border-radius: 10px;
     text-align: center;
     cursor: pointer;
+
+    display: flex;
+    flex-direction: row;
+    align-items: center;
+    justify-content: center;
 }
 
 .row.start span {

@@ -10,22 +10,28 @@ body {
     z-index: 99;
 }
 
-.getready,
-.question,
-.score {
-    opacity: 0;
+#app .getready,
+#app .question,
+#app .score {
     transition: opacity 0.5s;
 }
 
-.getready h1 {
-    font-size: 35px;
+#app .questioncomponents {
+    display: none;
+    opacity: 0;
+    transition: opacity 0.3s;
 }
 
-.getready p {
+#app .question .getready h1 {
+    font-size: 35px;
+    text-align: center;
+}
+
+#app .getready p {
     font-size: 20px;
 }
 
-.buttons {
+#app .buttons {
     background-color: #126e82;
     /* Green */
     color: white;
@@ -38,8 +44,7 @@ body {
     cursor: pointer;
 }
 
-.getready,
-.question {
+#app .question {
     text-align: center;
     height: 100vh;
     display: flex;
@@ -49,23 +54,72 @@ body {
     color: #126e82;
 }
 
-.question p {
+#app .getready {
+    text-align: center;
+    color: #126e82;
+}
+
+table.descriptiontable {
+    width: 100%;
+    text-align: left;
+    border-collapse: collapse;
+    table-layout: fixed;
+    max-width: 500px;
+    margin: 20px 0;
+}
+
+table.descriptiontable th {
+    padding: 5px 10px;
+}
+
+table.descriptiontable tbody td {
+    padding: 20px 10px;
+    font-size: 20px;
+    color: #126e82;
+    vertical-align: baseline;
+}
+
+table.descriptiontable tbody td li {
+    margin-left: 20px;
+}
+
+table.descriptiontable thead tr {
+    border-bottom: 3px solid #126e82;
+}
+
+table.descriptiontable thead th {
+    font-size: 20px;
+    font-weight: bold;
+    color: #126e82;
+    text-align: center;
+}
+
+table.descriptiontable .right {
+    border-left: 3px solid #126e82;
+}
+
+#app .question.mobile {
+    height: auto;
+    margin-top: 60px;
+}
+
+#app .question p {
     font-size: 25px;
 }
 
-.question h1 {
+#app .question h1 {
     font-size: 50px;
     text-align: right;
 }
 
-.question hr {
+#app .question hr {
     border: 1px solid #126e82;
     margin: 0 auto 15px auto;
     max-width: 200px;
     width: 100%;
 }
 
-.question .symbol {
+#app .question .symbol {
     position: absolute;
     top: 50%;
     right: -30px;
@@ -74,13 +128,13 @@ body {
     transform: translateY(-50%);
 }
 
-.question .nums {
-    margin: 10px 0;
+#app .question .nums {
+    margin: 10px auto;
     position: relative;
-
+    width: fit-content
 }
 
-.question input {
+#numberinput input {
     background-color: white;
     color: #126e82;
     font-weight: bold;
@@ -90,32 +144,95 @@ body {
     max-width: 200px;
     text-align: center;
     width: 100%;
+    margin: 0 auto;
+    display: block;
+    position: relative;
+    height: 65px;
+    transition: background-color 0.6s;
 }
 
-.score {
+#numberinput input:not(.started)::-webkit-outer-spin-button,
+#numberinput input:not(.started)::-webkit-inner-spin-button {
+    -webkit-appearance: none;
+}
+
+#numberinput input:not(.started) {
+    background-color: #126e82;
+    /* height: 45px; */
+    font-size: 30px;
+    -moz-appearance: textfield;
+}
+
+#numberinput input::placeholder {
     text-align: center;
+    font-size: 30px;
+    color: #FFFFFF;
+    vertical-align: middle;
+    line-height: 65px;
 }
 
-.score h1,
-.score h2 {
+#app .ingameactions {
+    display: block;
+    margin-top: 15px;
+}
+
+#app .ingameactions a i {
+    margin-right: 5px;
+}
+
+#app .ingameactions a:not(:first-child) {
+    margin-left: 18px;
+}
+
+#app .score {
+    text-align: center;
+    opacity: 0;
+}
+
+#app .score h1,
+#app .score h2 {
     color: #126e82;
 }
 
-.score .buttonEnd {
+#app .score .buttonEnd {
     margin-bottom: 10px;
+    font-size: 20px;
+    padding: 10px 32px;
 }
 
-.colorex {
+#app .score .buttonEnd:first-child {
+    margin-top: 30px;
+}
+
+#app .colorex {
     color: black;
 }
 
-.question,
-.score {
+#app .score {
     display: none;
+}
+
+#app .score #wholeScore,
+#app .score #whatDigits {
+    font-size: 30px; 
+    margin-bottom: 0;
+}
+
+#app .score #percentScore {
+    font-size: 80px;
+}
+
+#app .score #secondScore {
+    font-size: 60px; 
+    margin-top: 10px;
+    margin-bottom: 20px;
+    line-height: 60px;
 }
 
 
 
-.showondiv {
+
+
+#app .showondiv {
     display: none;
 }
