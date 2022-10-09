@@ -1,0 +1,101 @@
+@import url('https://fonts.googleapis.com/css2?family=IBM+Plex+Mono:ital,wght@0,300;0,400;0,700;1,300;1,400;1,700&family=Staatliches&family=Work+Sans:ital,wght@0,300;0,400;0,700;0,800;1,300;1,400;1,700;1,800&display=swap');
+
+body,* {
+    margin: 0;
+    padding: 0;
+    box-sizing: border-box;
+    font-family: 'Work Sans', system-ui;
+}
+
+:root {
+    --background: 44,51,51;
+    --neutral: 231,246,242;
+    --accent: 57,91,100;
+    --success: 60,207,78;
+    --failure: 214,28,78;
+}
+
+#paintful {
+    display: block;
+    max-width: 1000px;
+    width: 100%;
+    margin-left: auto;
+    margin-right: auto;
+    padding: 40px;
+    min-height: 100%;
+    
+}
+
+#app {
+    overflow: hidden;
+    height: 100vh;
+    width: 100vw;
+    background-color: rgba(var(--background));
+}
+
+.blockelem {
+    
+}
+
+h1,h2,h3,h4,h5,h6,blockquote,a,button,input[type=submit],th,p,span,ul,ol,td,time {
+    color: rgba(var(--neutral));
+}
+
+button,input[type=submit] {
+    color: rgba(var(--accent));
+}
+
+.logo {
+    cursor: pointer;
+}
+
+.logo>h1.title {
+    font-family: 'Staatliches';
+    letter-spacing: 0.1em;
+}
+
+/*------------------*/
+
+#topbar {
+    display: flex;
+    flex-direction: row;
+    justify-content: space-between;
+}
+
+#topbar>.section>* {
+    display: inline-block;
+}
+
+#topbar .logo {
+    margin-right: 1em;
+}
+
+#topbar .menubar a {
+    font-size: 2em;
+    margin-right: 0.5em;
+}
+
+#topbar #chooseoper a:not(.opsym) {
+    font-family: 'Staatliches';
+}
+
+#topbar .menubar a:not(.active) {
+    color: rgba(var(--neutral),0.5);
+}
+
+#topbar .menubar a.svg:not(.active)>svg {
+    width: 0.7em;
+    height: 0.7em;
+}
+
+#topbar .menubar a.svg:not(.active)>svg .main {
+    fill: rgba(var(--neutral),0.5);
+}
+
+#topbar .menubar a.svg.active>svg .main {
+    fill: rgba(var(--neutral));
+}
+
+#topbar .section.right .menubar {
+    text-align: end;
+}
