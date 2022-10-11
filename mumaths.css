@@ -5,6 +5,14 @@ body,* {
     padding: 0;
     box-sizing: border-box;
     font-family: 'Work Sans', system-ui;
+    touch-action: manipulation;
+}
+
+body {
+    overflow: hidden;
+    max-height: 100vh;
+    max-height: -webkit-fill-available;
+    max-height: -moz-available;
 }
 
 :root {
@@ -13,6 +21,10 @@ body,* {
     --accent: 57,91,100;
     --success: 60,207,78;
     --failure: 214,28,78;
+}
+
+.mono {
+    font-family: 'IBM Plex Mono', monospace;
 }
 
 #paintful {
@@ -51,7 +63,146 @@ button,input[type=submit] {
 
 .logo>h1.title {
     font-family: 'Staatliches';
+    font-size: 1.7em;
     letter-spacing: 0.1em;
+    font-weight: 400;
+}
+
+/*------------------*/
+
+#typer {
+    display: none;
+    position: fixed;
+    top: 0;
+    left: 0;
+    right: 0;
+    bottom: 0;
+    opacity: 0;
+    background-color: rgba(0,0,0,0.5);
+    transition: opacity 0.2s;
+}
+
+#typer.active {
+    display: block;
+}
+
+#typer #typerui {
+
+    display: block;
+    margin: 5vw auto;
+    width: 95%;
+    max-width: 700px;
+
+    background-color: rgba(var(--background));
+    border: 2px solid rgba(var(--accent));
+    border-bottom: none;
+    padding: 20px 0 0 0;
+}
+
+#typer .typerholder {
+    position: relative;
+    padding: 0 20px 20px 20px;
+    border-bottom: 2px solid rgba(var(--accent));
+}
+
+#typer .typerholder svg.close {
+    position: absolute;
+    top: 7px;
+    right: 20px;
+    height: 1.5em;
+    cursor: pointer;
+}
+
+#typer .typerholder svg.close .main {
+    fill: rgba(var(--neutral))
+}
+
+#typer #typerinput {
+    background-color: rgba(var(--neutral));
+    color: rgba(var(--background));
+    border-radius: 0;
+    border: none;
+    padding: 10px 15px;
+    width: calc(100% - 35px);
+    font-size: 1em;
+    outline: none;
+    height: 39px;
+}
+
+#typer #typercontent {
+    max-height: calc(100vh - 15vh - 5vw - 79px);
+    overflow-y: auto;
+}
+
+#typer #typercontent::-webkit-scrollbar {
+    width: 10px;
+}
+
+#typer #typercontent::-webkit-scrollbar-track {
+    background: rgba(var(--background));
+  }
+
+#typer #typercontent::-webkit-scrollbar-thumb {
+    background: rgba(var(--neutral),0.5);
+}
+
+#typer #typercontent .list,
+#typer #typercontent .errlist {
+    position: relative;
+    color: rgba(var(--neutral));
+    padding: 10px 20px;
+    border-bottom: 2px solid rgba(var(--accent));
+    cursor: pointer;
+}
+
+#typer #typercontent .list h1,
+#typer #typercontent .errlist h1 {
+    font-size: 1.5em;
+}
+
+#typer #typercontent .list.active,
+#typer #typercontent .list:hover {
+    background-color: rgba(var(--accent));
+}
+
+#typer #typercontent .list.check {
+    padding-right: 40px;
+}
+
+#typer #typercontent .list.check svg.checkmark {
+    right: 10px;
+    height: 1.5em;
+}
+
+#typer #typercontent .list.headingimg {
+    padding-left: 80px;
+}
+
+#typer #typercontent .list.headingimg .svgcontainer {
+    width: 50px;
+}
+
+#typer #typercontent .list.headingimg .svgcontainer {
+    left: 10px;
+    
+}
+
+#typer #typercontent .list.headingimg svg.content {
+    height: 2.5em;
+    display: block;
+    margin: 0 auto;
+}
+
+#typer #typercontent .list.check svg.checkmark .main,
+#typer #typercontent .list.headingimg svg.content .main {
+    fill: rgba(var(--neutral));
+}
+
+#typer #typercontent .list.check svg.checkmark,
+#typer #typercontent .list.headingimg .svgcontainer {
+    position: absolute;
+    top: 50%;
+    transform: translateY(-50%);
 }
 
 /*------------------*/
@@ -71,8 +222,17 @@ button,input[type=submit] {
 }
 
 #topbar .menubar a {
-    font-size: 2em;
-    margin-right: 0.5em;
+    font-size: 1.7em;
+    margin-right: 0.1em;
+    transition: color 0.3s, background-color 0.3s, border 0.3s;
+    padding: 0 10px;
+    border-radius: 5px;
+    cursor: pointer;
+    border-bottom: 2px solid rgba(var(--neutral),0);
+}
+
+#topbar #titlemenu {
+    margin-left: -12px;
 }
 
 #topbar #chooseoper a:not(.opsym) {
@@ -83,9 +243,23 @@ button,input[type=submit] {
     color: rgba(var(--neutral),0.5);
 }
 
-#topbar .menubar a.svg:not(.active)>svg {
+#topbar .menubar a.active {
+    border-bottom: 2px solid rgba(var(--neutral),1);
+    border-radius: 5px 5px 0 0;
+}
+
+#topbar .menubar a:hover {
+    background-color: rgba(var(--neutral));
+    color: rgba(var(--accent));
+}
+
+#topbar .menubar a.svg>svg {
     width: 0.7em;
     height: 0.7em;
+}
+
+#topbar .menubar a.svg>svg .main {
+    transition: fill 0.3s;
 }
 
 #topbar .menubar a.svg:not(.active)>svg .main {
@@ -96,6 +270,44 @@ button,input[type=submit] {
     fill: rgba(var(--neutral));
 }
 
+#topbar .menubar a.svg:hover>svg .main {
+    fill: rgba(var(--accent));
+}
+
 #topbar .section.right .menubar {
     text-align: end;
+}
+
+/*------------------*/
+
+#game {
+    margin-top: 30px;
+}
+
+#game #configbar {
+    width: 100%;
+    max-width: 500px;
+    display: block;
+    margin: 0 auto;
+}
+
+#game #configbar .spacer {
+    display: flex;
+    flex-wrap: wrap;
+    justify-content: space-evenly;
+    align-items: center;
+}
+
+#game #configbar .config {
+    padding: 0 10px;
+    text-align: center;
+    cursor: pointer;
+}
+
+#game #configbar .config .input svg {
+    height: 1em;
+}
+
+#game #configbar .config .input svg .main {
+    fill: rgba(var(--neutral))
 }
