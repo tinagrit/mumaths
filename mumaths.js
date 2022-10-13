@@ -28,8 +28,11 @@ window.scrollTo(0,0);
 
 // BEGIN TYPER
 
+document.getElementById('typer').classList.remove('active');
+
 document.getElementById('typererror').style.display = 'none';
 let typerStatus = false;
+let typerCloseable = false;
 let selectScroller = false;
 let selectedIndex = false;
 
@@ -44,7 +47,7 @@ const typerError = [
 
 const listElem = document.getElementById('typerlists');
 
-async function openTyper (arr = typerError) {
+async function openTyper (arr = typerError, closeable = true) {
     if (typeof arr != 'object') {
         arr = typerError
     }
@@ -53,6 +56,7 @@ async function openTyper (arr = typerError) {
 
     showQueryFromTerm(arr)
 
+    document.getElementById('typer').style.opacity = '0'
     document.getElementById('typer').classList.add('active');
 
     setTimeout(()=>{
@@ -64,6 +68,7 @@ async function openTyper (arr = typerError) {
     document.getElementById('typerinput').focus();
 
     typerStatus = true;
+    typerCloseable = closeable;
 
     document.getElementById('typerinput').addEventListener('input',()=>{showQueryFromTerm(arr)})
 }
@@ -75,6 +80,14 @@ document.getElementById('typerinput').addEventListener("keypress", function(even
             selectScroller[selectedIndex].handler();
         }
     }  
+});
+
+window.addEventListener('click', function(e){   
+    if (!document.getElementById('typerui').contains(e.target)){
+        if (typerStatus) {
+            closeTyper();
+        }
+    }
 });
 
 document.addEventListener('keydown',function(event) {
@@ -122,8 +135,10 @@ const showQueryFromTerm = (arr) => {
     }
     listElem.innerHTML = '';
     term = document.getElementById('typerinput').value;
-    result = arr.filter(item => item.searchTerm.toUpperCase().includes(term.toUpperCase()));
-    
+    result = [];
+
+    result = arr.filter(item => item.searchTerm.toUpperCase().startsWith(term.toUpperCase()));
+    result = result.concat(arr.filter(item => !item.searchTerm.toUpperCase().startsWith(term.toUpperCase()) && item.searchTerm.toUpperCase().includes(term.toUpperCase())))
 
     if (result.length < 1) {
         listElem.innerHTML = queryNotMatchTyper.replace(/{query}/gi,htmlEncode(term));
@@ -161,26 +176,38 @@ const showQueryFromTerm = (arr) => {
 
     if (document.querySelector('#typer #typercontent #typerlists .list')) {
         document.querySelectorAll('#typer #typercontent #typerlists .list')[0].classList.add('active');
+        selectedIndex = 0;
+        if (term === '') {
+            for (i=0; i<result.length; i++) {
+                if (result[i].checked) {
+                    document.querySelector('#typer #typercontent #typerlists .list.active').classList.remove('active');
+                    document.querySelectorAll('#typer #typercontent #typerlists .list')[i].classList.add('active');
+                    selectedIndex = i;
+                    break;
+                }
+            }
+        }
     }
 
     selectScroller = result.filter(item => !item.errlist);
-    selectedIndex = 0;
 }
 
 async function closeTyper () {
-    document.getElementById('typer').style.opacity = '0'
-    setTimeout(()=>{
-        document.getElementById('typer').classList.remove('active')
-    },200)
-    await sleep(200);
-
-    listElem.innerHTML = '';
-    typerstatus = false;
-    document.getElementById('typerinput').removeEventListener('input',()=>{showQueryFromTerm(arr)});
-    document.getElementById('typerinput').value = '';
-    selectScroller = false;
-    selectedIndex = false;
+    if (typerCloseable) {
+        document.getElementById('typer').style.opacity = '0'
+        setTimeout(()=>{
+            document.getElementById('typer').classList.remove('active')
+        },200)
+        await sleep(200);
     
+        listElem.innerHTML = '';
+        typerStatus = false;
+        document.getElementById('typerinput').removeEventListener('input',()=>{showQueryFromTerm(arr)});
+        document.getElementById('typerinput').value = '';
+        selectScroller = false;
+        selectedIndex = false;
+        typerCloseable = false;
+    }
 }
 
 document.getElementById('closetyperX').addEventListener('click',closeTyper);

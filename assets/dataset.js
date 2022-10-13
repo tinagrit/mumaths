@@ -49,38 +49,38 @@ let gameModeTyper = [
 let digitsTyper = [
     {
         text: `<p>${lang.gamemode.DigitPrefixSingular} <strong>1</strong> ${lang.gamemode.DigitSuffixSingular}</p>`,
-        searchTerm: `1 `,
+        searchTerm: `1 ${lang.gamemode.DigitSuffixSingular} ${lang.gamemode.DigitPrefixSingular} 1`,
         handler: () => {}
     },
     {
         text: `<p>${lang.gamemode.DigitPrefixPlural} <strong>1-2</strong> ${lang.gamemode.DigitSuffixPlural}</p>`,
-        searchTerm: `1-2`,
+        searchTerm: `1-2 ${lang.gamemode.DigitSuffixPlural} ${lang.gamemode.DigitPrefixPlural} 1-2`,
         handler: () => {},
         checked: true
     },
     {
         text: `<p>${lang.gamemode.DigitPrefixPlural} <strong>2</strong> ${lang.gamemode.DigitSuffixPlural}</p>`,
-        searchTerm: `2 `,
+        searchTerm: `2 ${lang.gamemode.DigitSuffixPlural} ${lang.gamemode.DigitPrefixPlural} 2`,
         handler: () => {}
     },
     {
         text: `<p>${lang.gamemode.DigitPrefixPlural} <strong>2-3</strong> ${lang.gamemode.DigitSuffixPlural}</p>`,
-        searchTerm: `2-3` ,
+        searchTerm: `2-3 ${lang.gamemode.DigitSuffixPlural} ${lang.gamemode.DigitPrefixPlural} 2-3` ,
         handler: () => {}
     },
     {
         text: `<p>${lang.gamemode.DigitPrefixPlural} <strong>3</strong> ${lang.gamemode.DigitSuffixPlural}</p>`,
-        searchTerm: `3 `,
+        searchTerm: `3 ${lang.gamemode.DigitSuffixPlural} ${lang.gamemode.DigitPrefixPlural} 3`,
         handler: () => {}
     },
     {
         text: `<p>${lang.gamemode.DigitPrefixPlural} <strong>3-4</strong> ${lang.gamemode.DigitSuffixPlural}</p>`,
-        searchTerm: `3-4`,
+        searchTerm: `3-4 ${lang.gamemode.DigitSuffixPlural} ${lang.gamemode.DigitPrefixPlural} 3-4`,
         handler: () => {}
     },
     {
         text: `<p>${lang.gamemode.DigitPrefixPlural} <strong>4</strong> ${lang.gamemode.DigitSuffixPlural}</p>`,
-        searchTerm: `4 `,
+        searchTerm: `4 ${lang.gamemode.DigitSuffixPlural} ${lang.gamemode.DigitPrefixPlural} 4`,
         handler: () => {}
     }
 ]
