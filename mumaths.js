@@ -48,6 +48,13 @@ const typerError = [
 const listElem = document.getElementById('typerlists');
 
 async function openTyper (arr = typerError, closeable = true) {
+    if (typerStatus) {
+        selectScroller = false;
+        selectedIndex = false;
+        document.getElementById('typerinput').removeEventListener('input',()=>{showQueryFromTerm(arr)});
+        document.getElementById('typerinput').value = '';
+    }
+
     if (typeof arr != 'object') {
         arr = typerError
     }
@@ -56,7 +63,7 @@ async function openTyper (arr = typerError, closeable = true) {
 
     showQueryFromTerm(arr)
 
-    document.getElementById('typer').style.opacity = '0'
+    if (!typerStatus) document.getElementById('typer').style.opacity = '0'
     document.getElementById('typer').classList.add('active');
 
     setTimeout(()=>{
@@ -137,8 +144,58 @@ const showQueryFromTerm = (arr) => {
     term = document.getElementById('typerinput').value;
     result = [];
 
-    result = arr.filter(item => item.searchTerm.toUpperCase().startsWith(term.toUpperCase()));
-    result = result.concat(arr.filter(item => !item.searchTerm.toUpperCase().startsWith(term.toUpperCase()) && item.searchTerm.toUpperCase().includes(term.toUpperCase())))
+    if (arr[0] !== 'input') {
+        result = arr.filter(item => item.searchTerm.toUpperCase().startsWith(term.toUpperCase()));
+        result = result.concat(arr.filter(item => !item.searchTerm.toUpperCase().startsWith(term.toUpperCase()) && item.searchTerm.toUpperCase().includes(term.toUpperCase())))
+    } else {
+        if (term === '') {
+            if (arr[1].current) {
+                result = [{
+                    text: arr[1].textWithQuery.replace(/{query}/gi,htmlEncode(arr[1].currentQuery)),
+                    checked: true,
+                }]
+            }
+        } else {
+            if (arr[1].numbersOnly) {
+                if (isNaN(term)) {
+                    result = [{
+                        text: lang.error.NumbersOnly,
+                        errlist: true
+                    }]
+                } else {
+                    if (Number(term) > arr[1].numbersMaximum) {
+                        result = [{
+                            text: lang.error.ExceedNumbers.replace(/{query}/gi,arr[1].numbersMaximum),
+                            errlist: true
+                        }]
+                    } else if (Number(term) < arr[1].numbersMinimum) {
+                        result = [{
+                            text: lang.error.SmallNumbers.replace(/{query}/gi,arr[1].numbersMinimum),
+                            errlist: true
+                        }]
+                    } else {
+                        if (Number(term) == 1) {
+                            result = [{
+                                text: arr[1].textWithQuerySingular.replace(/{query}/gi,htmlEncode(term)),
+                            }]
+                        } else {
+                            result = [{
+                                text: arr[1].textWithQuery.replace(/{query}/gi,htmlEncode(term)),
+                            }]
+                        }
+                    }
+                }
+            } else {
+                result = [{
+                    text: arr[1].textWithQuery.replace(/{query}/gi,htmlEncode(term)),
+                }]
+            }
+        }
+        result.push({
+            text: arr[1].text,
+            errlist: true
+        })
+    }
 
     if (result.length < 1) {
         listElem.innerHTML = queryNotMatchTyper.replace(/{query}/gi,htmlEncode(term));

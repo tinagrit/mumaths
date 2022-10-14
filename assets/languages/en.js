@@ -24,7 +24,10 @@ let lang = {
         UnknownTitle: 'An Unknown Error Occurred',
         UnknownDesc: 'Tap here or press ENTER to refresh. If the problem continues, please clear your browser cache and try again',
         NothingInList: 'There is nothing on the list',
-        NotFoundFor: 'No results found for <strong>{query}</strong>'
+        NotFoundFor: 'No results found for <strong>{query}</strong>',
+        NumbersOnly: 'Value can only be numbers',
+        ExceedNumbers: 'Value cannot exceed {query}',
+        SmallNumbers: 'Value cannot be lower than {query}'
     },
     typer: {
         TypeHerePlaceHolder: '> Type here'
@@ -34,6 +37,11 @@ let lang = {
         QuestionTitle: 'Questions',
         QuestionDesc: 'The game will keep going until a specific number of questions is completed',
         QuestionSearch: 'Questions Number',
+        QuestionPrefixSingular: '',
+        QuestionPrefixPlural: '',
+        QuestionSuffixSingular: 'question',
+        QuestionSuffixPlural: 'questions',
+        QuestionAsk: 'Please enter the number of questions',
         QuestionSmall: 'QUES',
         TimeTitle: 'Time',
         TimeDesc: 'The game will keep going within a specific timeframe',

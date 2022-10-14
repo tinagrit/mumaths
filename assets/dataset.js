@@ -85,4 +85,19 @@ let digitsTyper = [
     }
 ]
 
+let questionTimeTyper = [
+    'input',
+    {
+        text: `<em>${lang.gamemode.QuestionAsk}</em>`,
+        textWithQuery: `${lang.gamemode.QuestionPrefixPlural} <strong>{query}</strong> ${lang.gamemode.QuestionSuffixPlural}`,
+        textWithQuerySingular: `${lang.gamemode.QuestionPrefixSingular} <strong>{query}</strong> ${lang.gamemode.QuestionSuffixSingular}`,
+        numbersOnly: true,
+        numbersMaximum: 1000,
+        numbersMinimum: 1,
+        current: true,
+        currentQuery: '10',
+        handler: (data) => {}
+    }
+]
+
 // END TYPERS
