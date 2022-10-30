@@ -153,6 +153,7 @@ const showQueryFromTerm = (arr) => {
                 result = [{
                     text: arr[1].textWithQuery.replace(/{query}/gi,htmlEncode(arr[1].currentQuery)),
                     checked: true,
+                    handler: () => {arr[1].handler(arr[1].currentQuery)}
                 }]
             }
         } else {
@@ -163,6 +164,9 @@ const showQueryFromTerm = (arr) => {
                         errlist: true
                     }]
                 } else {
+                    if (arr[1].integerOnly) {
+                        term = String(Math.floor(Number(term)))
+                    }
                     if (Number(term) > arr[1].numbersMaximum) {
                         result = [{
                             text: lang.error.ExceedNumbers.replace(/{query}/gi,arr[1].numbersMaximum),
@@ -177,10 +181,12 @@ const showQueryFromTerm = (arr) => {
                         if (Number(term) == 1) {
                             result = [{
                                 text: arr[1].textWithQuerySingular.replace(/{query}/gi,htmlEncode(term)),
+                                handler: () => {arr[1].handler(term)}
                             }]
                         } else {
                             result = [{
                                 text: arr[1].textWithQuery.replace(/{query}/gi,htmlEncode(term)),
+                                handler: () => {arr[1].handler(term)}
                             }]
                         }
                     }
@@ -188,6 +194,7 @@ const showQueryFromTerm = (arr) => {
             } else {
                 result = [{
                     text: arr[1].textWithQuery.replace(/{query}/gi,htmlEncode(term)),
+                    handler: () => {arr[1].handler(term)}
                 }]
             }
         }
@@ -271,8 +278,13 @@ document.getElementById('closetyperX').addEventListener('click',closeTyper);
 
 // END TYPER
 
+
+
 document.querySelector('#chooseModeBtn>h1').innerHTML = questionSVG
 document.getElementById('chooseModeBtn').addEventListener('click',()=>{openTyper(gameModeTyper)});
+
+document.querySelector('#chooseQuesBtn>h1').innerHTML = '10'
+document.getElementById('chooseQuesBtn').addEventListener('click',()=>{openTyper(questionTimeTyper)});
 
 document.querySelector('#chooseDigitBtn>h1').innerHTML = '1-2'
 document.getElementById('chooseDigitBtn').addEventListener('click',()=>{openTyper(digitsTyper)});

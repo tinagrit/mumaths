@@ -21,8 +21,8 @@ let lang = {
         PageSuffix: ' — MUMATHS'
     },
     error: {
-        UnknownTitle: 'An Unknown Error Occurred',
-        UnknownDesc: 'Tap here or press ENTER to refresh. If the problem continues, please clear your browser cache and try again',
+        UnknownTitle: 'An Unknown Error Has Occurred',
+        UnknownDesc: 'Tap here or press ENTER to refresh. If the problem persists, please clear your browser cache and try again',
         NothingInList: 'There is nothing on the list',
         NotFoundFor: 'No results found for <strong>{query}</strong>',
         NumbersOnly: 'Value can only be numbers',

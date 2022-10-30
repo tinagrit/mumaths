@@ -94,9 +94,10 @@ let questionTimeTyper = [
         numbersOnly: true,
         numbersMaximum: 1000,
         numbersMinimum: 1,
+        integerOnly: true,
         current: true,
         currentQuery: '10',
-        handler: (data) => {}
+        handler: (data) => {console.log(data)}
     }
 ]
 
