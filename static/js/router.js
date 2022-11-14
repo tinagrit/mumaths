@@ -47,6 +47,14 @@ const fetchAndReplace = async (resources) => {
     if (resources[2]) {
         document.title = resources[2] + ' - MUMATHS — Quick Math Games'
     }
+    if (resources[3]) {
+        if (document.querySelector(`#mode a.active`)) {
+            document.querySelector(`#mode a.active`).classList.remove('active')
+        }
+        if (document.querySelector(`#mode a[data-menu='${resources[3]}']`)) {
+            document.querySelector(`#mode a[data-menu='${resources[3]}']`).classList.add('active')
+        }
+    }
 }
 
 const router = async () => {
@@ -61,7 +69,7 @@ const router = async () => {
 
     const routeList = [
         { path: "notfound", view: ['404.html','404.js','Not Found'] },
-        { path: "calculation", view: ['calculation.html','calculation.js','Calculation'] },
+        { path: "calculation", view: ['calculation.html','calculation.js','Calculation','calculation'] },
     ];
 
     const potentialMatches = routeList.map(route => {

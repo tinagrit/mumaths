@@ -29,13 +29,17 @@ body {
 
 #paintful {
     display: block;
-    max-width: 1000px;
-    width: 100%;
-    margin-left: auto;
-    margin-right: auto;
     padding: 40px;
     min-height: 100%;
-    
+    margin-left: 0;
+    z-index: 2;
+}
+
+#paintful .widthcontroller {
+    display: block;
+    margin: 0 auto;
+    max-width: 1000px;
+    width: 100%;
 }
 
 #app {
@@ -61,13 +65,6 @@ button,input[type=submit] {
     cursor: pointer;
 }
 
-.logo>h1.title {
-    font-family: 'Staatliches';
-    font-size: 1.7em;
-    letter-spacing: 0.1em;
-    font-weight: 400;
-}
-
 /*------------------*/
 
 #typer {
@@ -79,6 +76,7 @@ button,input[type=submit] {
     bottom: 0;
     background-color: rgba(0,0,0,0.5);
     transition: opacity 0.2s;
+    z-index: 98;
 }
 
 #typer.active {
@@ -96,6 +94,8 @@ button,input[type=submit] {
     border: 2px solid rgba(var(--accent));
     border-bottom: none;
     padding: 20px 0 0 0;
+
+    z-index: 99;
 }
 
 #typer .typerholder {
@@ -223,7 +223,14 @@ button,input[type=submit] {
     margin-right: 1em;
 }
 
-#topbar .menubar a {
+.logo>h1.title {
+    font-family: 'Staatliches';
+    font-size: 1.7em;
+    letter-spacing: 0.1em;
+    font-weight: 400;
+}
+
+.menubar a {
     font-size: 1.7em;
     margin-right: 0.1em;
     transition: color 0.3s, background-color 0.3s, border 0.3s;
@@ -231,6 +238,23 @@ button,input[type=submit] {
     border-radius: 5px;
     cursor: pointer;
     border-bottom: 2px solid rgba(var(--neutral),0);
+    display: inline-flex;
+    align-items: center;
+    min-height: 34px;
+}
+
+.menubar.nowrap {
+    white-space: nowrap;
+}
+
+.menubar a .texts {
+    display: inline;
+    font-size: 0.7em;
+    white-space: nowrap;
+    overflow-x: hidden;
+    max-width: 0;
+    margin-left: 0;
+    transition: margin-left 0.5s, max-width 0.3s;
 }
 
 #topbar #titlemenu {
@@ -241,43 +265,116 @@ button,input[type=submit] {
     font-family: 'Staatliches';
 }
 
-#topbar .menubar a:not(.active) {
+.menubar a:not(.active) {
     color: rgba(var(--neutral),0.5);
 }
 
-#topbar .menubar a.active {
+.menubar a.active {
     border-bottom: 2px solid rgba(var(--neutral),1);
     border-radius: 5px 5px 0 0;
 }
 
-#topbar .menubar a:hover {
+.menubar a:hover {
     background-color: rgba(var(--neutral));
     color: rgba(var(--accent));
 }
 
-#topbar .menubar a.svg>svg {
+.menubar a.active .texts,
+.menubar a:hover .texts {
+    max-width: 150px;
+    margin-left: 10px
+}
+
+.menubar a.svg>svg {
     width: 0.7em;
     height: 0.7em;
 }
 
-#topbar .menubar a.svg>svg .main {
+.menubar a.svg>svg .main {
     transition: fill 0.3s;
 }
 
-#topbar .menubar a.svg:not(.active)>svg .main {
+.menubar a.svg:not(.active)>svg .main {
     fill: rgba(var(--neutral),0.5);
 }
 
-#topbar .menubar a.svg.active>svg .main {
+.menubar a.svg.active>svg .main {
     fill: rgba(var(--neutral));
 }
 
-#topbar .menubar a.svg:hover>svg .main {
+.menubar a.svg:hover>svg .main {
     fill: rgba(var(--accent));
 }
 
 #topbar .section.right .menubar {
     text-align: end;
+}
+
+/*------------------*/
+
+
+nav {
+    min-height: 100%;
+    max-height: 100%;
+    display: none;
+    position: fixed;
+    width: 400px;
+    max-width: 90px;
+    overflow-x: hidden;
+    overflow-y: auto;
+    background-color: transparent;
+    border-right: 2px solid rgba(var(--accent));
+    transition: max-width 0.5s, background-color 0.5s, box-shadow 0.5s, border-right 0.5s;
+}
+
+nav:hover {
+    max-width: 400px;
+    background-color: rgba(var(--accent));
+}
+
+nav .links.linkstop {
+    margin-top: 100px;
+}
+
+nav .links .link {
+    padding-left: 5px;
+    display: flex;
+    justify-content: flex-start;
+    padding-top: 10px;
+    padding-bottom: 10px;
+    cursor: pointer;
+}
+
+nav .links .link .img {
+    width: 75px;
+    flex-shrink: 0;
+    margin-right: 20px;
+    padding: 0 25px;
+}
+
+nav .links .link svg.img .main {
+    fill: rgba(var(--neutral))
+}
+
+nav .links .link .texts {
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    position: relative;
+    bottom: 3px;
+}
+
+nav .links .link h2 {
+    opacity: 0;
+    transition: opacity 0.5s;
+}
+
+nav:hover .links .link h2 {
+    opacity: 1;
+}
+
+nav .links .link h2 {
+    width: calc(400px - 190px)
 }
 
 /*------------------*/
