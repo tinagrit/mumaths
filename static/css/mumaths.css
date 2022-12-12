@@ -9,18 +9,18 @@ body,* {
 }
 
 body {
-    overflow: hidden;
-    max-height: 100vh;
+    overflow-x: hidden;
+    min-height: 100vh;
     max-height: -webkit-fill-available;
     max-height: -moz-available;
 }
 
 :root {
-    --background: 44,51,51;
-    --neutral: 231,246,242;
-    --accent: 57,91,100;
-    --success: 60,207,78;
-    --failure: 214,28,78;
+    --background: 44,51,51; /* rgba(44,51,51) */
+    --neutral: 231,246,242; /* rgba(231,246,242) */
+    --accent: 57,91,100; /* rgba(57,91,100) */
+    --success: 60,207,78; /* rgba(60,207,78) */
+    --failure: 214,28,78; /* rgba(214,28,78) */
 }
 
 .mono {
@@ -28,22 +28,24 @@ body {
 }
 
 #paintful {
-    display: block;
-    padding: 40px;
+    display: block;  
     min-height: 100%;
     margin-left: 0;
     z-index: 2;
 }
 
 #paintful .widthcontroller {
-    display: block;
+    display: flex;
+    flex-direction: column;
     margin: 0 auto;
     max-width: 1000px;
     width: 100%;
+    height: 100vh;
+    padding: 40px 40px 0 40px;
 }
 
 #app {
-    overflow: hidden;
+    overflow-x: hidden;
     height: 100vh;
     width: 100vw;
     background-color: rgba(var(--background));
@@ -63,6 +65,16 @@ button,input[type=submit] {
 
 .logo {
     cursor: pointer;
+}
+
+input::-webkit-outer-spin-button,
+input::-webkit-inner-spin-button {
+  -webkit-appearance: none;
+  margin: 0;
+}
+
+input[type=number] {
+    -moz-appearance: textfield;
 }
 
 /*------------------*/
@@ -248,13 +260,7 @@ button,input[type=submit] {
 }
 
 .menubar a .texts {
-    display: inline;
-    font-size: 0.7em;
-    white-space: nowrap;
-    overflow-x: hidden;
-    max-width: 0;
-    margin-left: 0;
-    transition: margin-left 0.5s, max-width 0.3s;
+    display: none;
 }
 
 #topbar #titlemenu {
@@ -308,6 +314,19 @@ button,input[type=submit] {
 
 #topbar .section.right .menubar {
     text-align: end;
+}
+
+
+@media screen and (min-width: 1000px) {
+    .menubar a .texts {
+        display: inline;
+        font-size: 0.7em;
+        white-space: nowrap;
+        overflow-x: hidden;
+        max-width: 0;
+        margin-left: 0;
+        transition: margin-left 0.5s, max-width 0.3s;
+    }
 }
 
 /*------------------*/
@@ -383,6 +402,7 @@ nav .links .link h2 {
     margin-top: 30px;
     opacity: 1;
     transition: opacity 0.25s;
+    position: relative;
 }
 
 #game.notactive {
@@ -394,6 +414,12 @@ nav .links .link h2 {
     max-width: 500px;
     display: block;
     margin: 0 auto;
+    /* position: absolute;
+    top: 0;
+    left: 0;
+    right: 0; */
+    margin: 0 auto;
+    z-index: 4;
 }
 
 #game #configbar .spacer {
@@ -415,4 +441,129 @@ nav .links .link h2 {
 
 #game #configbar .config .input svg .main {
     fill: rgba(var(--neutral))
+}
+
+#game #ingame {
+    width: 100%;
+    max-width: 500px;
+    display: block;
+    /* position: absolute;
+    top: calc(30% + 30px);
+    transform: translateY(calc(-30% + 30px));
+    left: 0;
+    right: 0; */
+    margin: 0 auto;
+    padding: 50px 0;
+    z-index: 3;
+}
+
+#game #ingame .onWhenActive {
+    opacity: 0;
+    transition: opacity 0.25s;
+}
+
+#game #ingame .fullWhenActive {
+    opacity: 0.3;
+    transition: opacity 0.25s;
+}
+
+#game #ingame.active .onWhenActive,
+#game #ingame.active .fullWhenActive {
+    opacity: 1;
+}
+
+#game #ingame #ingamestat {
+    display: flex;
+    justify-content: space-between;
+    margin-bottom: 30px;
+    /* opacity: 0; */
+}
+
+#game #ingame .statsvg,
+#game #ingame .buttonsvg {
+    height: 1.2em;
+}
+
+#game #ingame .statsvg .main,
+#game #ingame .buttonsvg .main {
+    fill: rgba(var(--neutral));
+}
+
+#game #ingame .statvalue,
+#game #ingame .buttontext {
+    font-size: 1.2em;
+    margin-left: 8px;
+}
+
+#game #ingame .statvalue.mgright {
+    margin-right: 8px;
+}
+
+#game #ingame .valNextToImg>*,
+#game #ingame .actionbutton>* {
+    display: inline-block;
+}
+
+#game #ingame .valNextToImg,
+#game #ingame .actionbutton {
+    display: flex;
+    align-items: center;
+}
+
+@media screen and (max-width: 400px) {
+    #game #ingame .statsvg:not(.keepOnSmall) {
+        display: none;
+    }
+    
+    #game #ingame .hideOnSmall {
+        display: none;
+    }
+}
+
+#game #ingame #question {
+    text-align: center;
+}
+
+#game #ingame #question .questionNumber {
+    font-size: 2.5em;
+    margin: 10px 0;
+}
+
+#game #ingame #answer {
+    display: block;
+    margin: 0 auto;
+    margin-top: 20px;
+    background-color: rgba(var(--accent));
+    color: rgba(var(--neutral));   
+    width: 90%;
+    max-width: 200px;
+    padding: 5px 30px;
+    font-size: 2.5em;
+    font-weight: bold;
+    text-align: center;
+    outline: none;
+    border: none;
+    border-bottom: 3px solid rgba(var(--neutral));
+    cursor: pointer;
+}
+
+#game #ingame.active #answer {
+    cursor: text;
+}
+
+#game #ingame #answer::placeholder {
+    color: rgba(var(--neutral));
+    opacity: 1;
+    transition: opacity 0.25s;
+}
+
+#game #ingame.active #answer::placeholder {
+    opacity: 0;
+}
+
+#game #ingame #ingameactions {
+    margin: 30px 0;
+    display: flex;
+    justify-content: space-evenly;
+    align-items: center;
 }

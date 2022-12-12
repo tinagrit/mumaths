@@ -278,3 +278,4 @@ document.getElementById('closetyperX').addEventListener('click',closeTyper);
 
 // END TYPER
 
+document.getElementById('game').style.minHeight = "calc(100vh - " + (Number(window.getComputedStyle(document.getElementById('mainWidthcontroller')).paddingTop.slice(0,-2)) + Number(window.getComputedStyle(document.getElementById('topbar')).height.slice(0,-2)) + Number(window.getComputedStyle(document.getElementById('game')).marginTop.slice(0,-2))) + "px)"
