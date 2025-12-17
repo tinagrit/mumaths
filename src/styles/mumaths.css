@@ -81,6 +81,7 @@ input[type=number] {
 
 #typer {
     display: none;
+    opacity: 0;
     position: fixed;
     top: 0;
     left: 0;
@@ -89,10 +90,15 @@ input[type=number] {
     background-color: rgba(0,0,0,0.5);
     transition: opacity 0.2s;
     z-index: 98;
+    opacity: 0;
 }
 
 #typer.active {
     display: block;
+}
+
+#typer.active.opacity {
+    opacity: 1;
 }
 
 #typer #typerui {
@@ -235,7 +241,12 @@ input[type=number] {
     margin-right: 1em;
 }
 
-.logo>h1.title {
+.logo a {
+    text-decoration: none;
+    color: rgba(var(--neutral));
+}
+
+.logo h1.title {
     font-family: 'Staatliches';
     font-size: 1.7em;
     letter-spacing: 0.1em;
@@ -253,6 +264,7 @@ input[type=number] {
     display: inline-flex;
     align-items: center;
     min-height: 34px;
+    text-decoration: none;
 }
 
 .menubar.nowrap {
@@ -264,11 +276,21 @@ input[type=number] {
 }
 
 #topbar #titlemenu {
-    margin-left: -12px;
+    /* margin-left: -12px; */
 }
 
-#topbar #chooseoper a:not(.opsym) {
+#chooseoper {
+    display: flex;
+    justify-content: center;
+    margin-bottom: 1em;
+}
+
+#chooseoper a:not(.opsym) {
     font-family: 'Staatliches';
+}
+
+#chooseoper a.opsym.inactive {
+    opacity: 0.3;;
 }
 
 .menubar a:not(.active) {
@@ -280,7 +302,7 @@ input[type=number] {
     border-radius: 5px 5px 0 0;
 }
 
-.menubar a:hover {
+.menubar a:hover:not(.menubar a.inactive) {
     background-color: rgba(var(--neutral));
     color: rgba(var(--accent));
 }
@@ -288,7 +310,8 @@ input[type=number] {
 .menubar a.active .texts,
 .menubar a:hover .texts {
     max-width: 150px;
-    margin-left: 10px
+    margin-left: 10px;
+    text-decoration: none;
 }
 
 .menubar a.svg>svg {
@@ -435,8 +458,12 @@ nav .links .link h2 {
     cursor: pointer;
 }
 
+#game #configbar .config.inactive {
+    opacity: 0.3;
+}
+
 #game #configbar .config .input svg {
-    height: 1em;
+    height: 0.8em;
 }
 
 #game #configbar .config .input svg .main {
