@@ -26,14 +26,6 @@ RewriteEngine On
 ############################################################
 
 ############################################################
-# FOR PRODUCTION - Take /mumaths to static about page      #
-#                                                          #
-    #RewriteCond %{REQUEST_URI} ^/mumaths/
-    #RewriteRule ^([0-9a-zA-Z_-]+) static/statichtml/about.html [NC,L]
-#                                                          #
-############################################################
-
-############################################################
 # DYNAMIC WEB IMPLEMENTATION - Take all / to index.html    #
 # and the router will work on directories                  #
 #                                                          #
