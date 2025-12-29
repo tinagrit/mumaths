@@ -31,23 +31,47 @@ const parseDigitRange = (range: string) => {
 
 const randomValueForDigits = (digits: number) => {
   if (digits <= 1) {
-    return randomBetween(0, 9);
+    return randomBetween(1, 9);
   }
   const min = 10 ** (digits - 1);
   const max = 10 ** digits - 1;
   return randomBetween(min, max);
 };
 
-const generateOperands = (digitRange: string): [number, number] => {
+const generateOperands = (digitRange: string, divisible: boolean, firstGreater: boolean): [number, number] => {
   const { minDigits, maxDigits } = parseDigitRange(digitRange);
-  const firstDigits = randomBetween(minDigits, maxDigits);
-  const secondDigits = randomBetween(minDigits, maxDigits);
-  const first = randomValueForDigits(firstDigits);
-  let second = randomValueForDigits(secondDigits);
-  if (second === 0) {
-    second = 1;
+  // const firstDigits = randomBetween(minDigits, maxDigits);
+  // const secondDigits = randomBetween(minDigits, maxDigits);
+
+  let a = 0;
+  let b = 0;
+
+  if (divisible) {
+    for (let attempt = 0; attempt < 9999; attempt++) {
+      b = randomValueForDigits(minDigits);
+      if (b === 0) continue;
+
+      const minA = 10 ** (maxDigits - 1);
+      const maxA = 10 ** maxDigits - 1;
+
+      const kMin = Math.ceil(minA / b);
+      const kMax = Math.floor(maxA / b);
+
+      if (kMin > kMax) continue;
+
+      const k = randomBetween(kMin, kMax);
+      a = b * k;
+      break;
+    }
+  } else {
+    a = randomValueForDigits(maxDigits);
+    b = randomValueForDigits(minDigits);
   }
-  return [first, second];
+
+  if (firstGreater && a < b) {
+    return [b, a];
+  }
+  return [a, b];
 };
 
 const pickOperation = (operation: Operation): Operation => {
@@ -74,7 +98,7 @@ const calculateAnswer = (operation: Operation, [a, b]: [number, number]) => {
 
 export function useCalculationGame(settings: CalculationSettings) {
   const [isPlaying, setIsPlaying] = useState(false);
-  const [operands, setOperands] = useState<[number, number]>(() => generateOperands(settings.digitRange));
+  const [operands, setOperands] = useState<[number, number]>(() => generateOperands(settings.digitRange, settings.operation === 'division', false));
   const [currentOperation, setCurrentOperation] = useState<Operation>(pickOperation(settings.operation));
   const [score, setScore] = useState<CalculationScore>({ correct: 0, incorrect: 0 });
   const [questionsAnswered, setQuestionsAnswered] = useState(0);
@@ -84,7 +108,7 @@ export function useCalculationGame(settings: CalculationSettings) {
 
   const prepareNextQuestion = useCallback(() => {
     setCurrentOperation(pickOperation(settings.operation));
-    setOperands(generateOperands(settings.digitRange));
+    setOperands(generateOperands(settings.digitRange, settings.operation === 'division', false));
   }, [settings.digitRange, settings.operation]);
 
   const stopGame = useCallback(() => {

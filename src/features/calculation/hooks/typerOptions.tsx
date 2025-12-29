@@ -20,6 +20,18 @@ export const digitRangeOptions: DigitRangeOption[] = [
   { id: '4', label: '4', searchTerms: ['4'] }
 ];
 
+export const digitRangeCompetitiveOptions: DigitRangeOption[] = [
+  { id: '1-2', label: '1-2', searchTerms: ['1-2'] },
+  { id: '2-3', label: `(${lang.gamemode.CompDefault}) 2-3`, searchTerms: ['2-3'] },
+  { id: '3-4', label: '3-4', searchTerms: ['3-4'] }
+];
+
+export const questionRangeCompetitiveOptions: DigitRangeOption[] = [
+  { id: '10', label: `(${lang.gamemode.CompDefault}) 10`, searchTerms: ['10'] },
+  { id: '20', label: `20`, searchTerms: ['20'] },
+  { id: '50', label: `50`, searchTerms: ['50'] }
+];
+
 export const getGameModeOptions = (current: GameMode): TyperListOption[] => [
   {
     id: 'question',
@@ -55,11 +67,31 @@ export const getGameModeOptions = (current: GameMode): TyperListOption[] => [
   }
 ];
 
-export const getDigitOptions = (current: string): TyperListOption[] =>
-  digitRangeOptions.map((option) => ({
+export const getDigitOptions = (current: string, mode: GameMode): TyperListOption[] => {
+  if (mode === 'competitive') {
+    return digitRangeCompetitiveOptions.map((option) => ({
+      id: option.id,
+      title: undefined,
+      description: `${option.label} ${lang.gamemode.DigitSuffixPlural}`.trim(),
+      selected: option.id === current,
+      searchTerms: option.searchTerms
+    }));
+  }
+
+  return digitRangeOptions.map((option) => ({
     id: option.id,
     title: undefined,
     description: `${option.label} ${lang.gamemode.DigitSuffixPlural}`.trim(),
     selected: option.id === current,
+    searchTerms: option.searchTerms
+  }));
+}
+
+export const getQuestionCompetitiveOptions = (current: number): TyperListOption[] =>
+  questionRangeCompetitiveOptions.map((option) => ({
+    id: option.id,
+    title: undefined,
+    description: `${option.label} ${lang.gamemode.QuestionSuffixPlural}`.trim(),
+    selected: Number(option.id) === current,
     searchTerms: option.searchTerms
   }));

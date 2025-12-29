@@ -2,6 +2,7 @@ export const lang = {
   metadata: {
     Name: 'MUMATHS',
     NameDisplay: 'MUMATHS',
+    NameDisplayTiny: 'MM',
     Title: 'MUMATHS',
     SocialTile: 'MUMATHS — Quick Math Games',
     SocialDesc: 'Practice your math skills',
@@ -57,7 +58,8 @@ export const lang = {
     DigitSmall: 'DIGITS',
     CompTitle: 'Competitive',
     CompDesc: 'Make the best time for 10 questions, 1-2 digits',
-    CompSearch: 'Competitive Comp Fixed'
+    CompSearch: 'Competitive Comp Fixed',
+    CompDefault: 'Default'
   }
 } as const;
 

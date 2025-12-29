@@ -1,6 +1,6 @@
-import { KeyboardEvent, useMemo, useState } from 'react';
+import { KeyboardEvent, useEffect, useMemo, useRef, useState } from 'react';
 import { lang } from '../../data/lang';
-import { GameMode, getDigitOptions, getGameModeOptions } from './hooks/typerOptions';
+import { GameMode, getDigitOptions, getGameModeOptions, getQuestionCompetitiveOptions } from './hooks/typerOptions';
 import { useDocumentTitle } from '../../hooks/useDocumentTitle';
 import { useTyper } from '../../components/typer/TyperProvider';
 import {
@@ -14,7 +14,8 @@ import {
   ScoreFailureIcon,
   ScoreSuccessIcon,
   ShuffleIcon,
-  TimerStatIcon
+  TimerStatIcon,
+  PlayIcon
 } from '../../components/icons';
 import { CalculationSettings, Operation, useCalculationGame } from './hooks/useCalculationGame';
 
@@ -61,6 +62,9 @@ export default function CalculationPage() {
   const [settings, setSettings] = useState<CalculationSettings>(initialSettings);
   const game = useCalculationGame(settings);
 
+  const questionsRef = useRef<HTMLDivElement>(null);
+  const answerRef = useRef<HTMLInputElement>(null);
+
   // displayed string value
   const questionValue = useMemo(() => {
     if (settings.mode === 'time') {
@@ -94,7 +98,7 @@ export default function CalculationPage() {
         }));
 
         if (option.id === 'competitive') {
-          setSettings((prev) => ({ ...prev, digitRange: '1-2', questionLimit: 10, operation: 'shuffle' }));
+          setSettings((prev) => ({ ...prev, digitRange: '2-3', questionLimit: 10, operation: 'shuffle' }));
         }
       }
     });
@@ -102,7 +106,20 @@ export default function CalculationPage() {
 
   // user clicks to choose question limit
   const handleQuestionConfig = () => {
-    if (settings.mode === 'infinity' || settings.mode === 'competitive' || game.isPlaying) return;
+    if (settings.mode === 'infinity' || game.isPlaying) return;
+
+    if (settings.mode == 'competitive') {
+      openTyper({
+        type: 'list',
+        label: lang.gamemode.QuestionTitle,
+        options: getQuestionCompetitiveOptions(settings.questionLimit),
+        onSelect: (option) => {
+          setSettings((prev) => ({ ...prev, questionLimit: Number(option.id) }));
+        }
+      });
+
+      return;
+    }
 
     const isTime = settings.mode === 'time';
     openTyper({
@@ -125,12 +142,12 @@ export default function CalculationPage() {
   };
 
   const handleDigitChange = () => {
-    if (settings.mode === 'competitive' || game.isPlaying) return;
+    if (game.isPlaying) return;
 
     openTyper({
       type: 'list',
       label: lang.gamemode.DigitTitle,
-      options: getDigitOptions(settings.digitRange),
+      options: getDigitOptions(settings.digitRange, settings.mode),
       onSelect: (option) => {
         setSettings((prev) => ({ ...prev, digitRange: option.id }));
       }
@@ -164,7 +181,27 @@ export default function CalculationPage() {
     if (!game.isPlaying) {
       game.startGame();
     }
+
+    if (questionsRef.current && answerRef.current) {
+      const dynamicWidth = Number(answerRef.current.offsetWidth / 2) - Number(questionsRef.current.offsetWidth / 2);
+      document.documentElement.style.setProperty('--padding-right-answer-box', `${dynamicWidth}px`);
+    }
   };
+
+  const operationSymbol = (operation: Operation) => {
+    switch (operation) {
+      case 'addition':
+        return '+';
+      case 'subtraction':
+        return '-';
+      case 'multiplication':
+        return '×';
+      case 'division':
+        return '÷';
+      default:
+        return '';
+    }
+  }
 
   return (
     <>
@@ -181,7 +218,7 @@ export default function CalculationPage() {
                 <a
                   key={operation.id}
                   data-menu={operation.id}
-                  className={className}
+                  className={game.isPlaying ? className + ' inactive' : className}
                   href="#"
                   onClick={(event) => {
                     event.preventDefault();
@@ -198,7 +235,7 @@ export default function CalculationPage() {
               <a
                 key={operation.id}
                 data-menu={operation.id}
-                className={settings.mode === 'competitive' ? className + ' inactive' : className}
+                className={settings.mode === 'competitive' || game.isPlaying ? className + ' inactive' : className}
                 href="#"
                 onClick={(event) => {
                   event.preventDefault();
@@ -212,7 +249,7 @@ export default function CalculationPage() {
         </div>
         <div className="spacer">
           <div
-            className="config"
+            className={"config" + (game.isPlaying ? ' inactive' : '')}
             id="chooseModeBtn"
             role="button"
             tabIndex={0}
@@ -222,7 +259,7 @@ export default function CalculationPage() {
             <p className="desc">{lang.gamemode.ModeSmall}</p>
           </div>
           <div
-            className={"config" + (settings.mode === 'infinity' || settings.mode === 'competitive' ? ' inactive' : '')}
+            className={"config" + (settings.mode === 'infinity' || game.isPlaying ? ' inactive' : '')}
             id="chooseQuesBtn"
             role="button"
             tabIndex={0}
@@ -238,7 +275,7 @@ export default function CalculationPage() {
             </p>
           </div>
           <div
-            className={"config" + (settings.mode === 'competitive' ? ' inactive' : '')}
+            className={"config" + (game.isPlaying ? ' inactive' : '')}
             id="chooseDigitBtn"
             role="button"
             tabIndex={0}
@@ -271,25 +308,29 @@ export default function CalculationPage() {
           </div>
         </div>
 
-        <div id="question" className="fullWhenActive">
-          <h1 id="firstNumber" className="questionNumber firstNumber">
+        <div id="question" className="fullWhenActive" ref={questionsRef}>
+          <h1 id="firstNumber" className="questionNumber firstNumber mono">
             {numberFormatter.format(game.operands[0])}
           </h1>
-          <h1 id="secondNumber" className="questionNumber secondNumber">
+          <p id="operationSymbol" className="mono">{operationSymbol(game.operation)}</p>
+          <h1 id="secondNumber" className="questionNumber secondNumber mono">
             {numberFormatter.format(game.operands[1])}
           </h1>
         </div>
 
-        <input
-          type="number"
-          id="answer"
-          autoComplete="off"
-          placeholder="START"
-          value={answer}
-          onChange={(event) => setAnswer(event.target.value)}
-          onKeyDown={handleAnswerKeyDown}
-          onFocus={handleInputFocus}
-        />
+        <div className="answerHolder">
+          <input
+            type="number"
+            id="answer"
+            autoComplete="off"
+            value={answer}
+            onChange={(event) => setAnswer(event.target.value)}
+            onKeyDown={handleAnswerKeyDown}
+            onFocus={handleInputFocus}
+            ref={answerRef}
+          />
+          <div className="answerCta"><PlayIcon /><p className="hideOnSmall">START</p></div>
+        </div>
 
         <div id="ingameactions" className="onWhenActive">
           <div

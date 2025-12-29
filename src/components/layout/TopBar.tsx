@@ -19,7 +19,8 @@ export default function TopBar() {
       <div className="section left">
         <div className="logo">
           <Link to="/">
-            <h1 className="title">{lang.metadata.NameDisplay}</h1>
+            <h1 className="title hideOnSmall">{lang.metadata.NameDisplay}</h1>
+            <h1 className="title showOnSmall">{lang.metadata.NameDisplayTiny}</h1>
           </Link>
         </div>
         <div className="menubar nowrap" id="titlemenu">
