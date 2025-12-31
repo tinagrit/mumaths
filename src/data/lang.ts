@@ -60,6 +60,12 @@ export const lang = {
     CompDesc: 'Make the best time for 10 questions, 1-2 digits',
     CompSearch: 'Competitive Comp Fixed',
     CompDefault: 'Default'
+  },
+  preferences: {
+    Title: 'Preferences',
+    RightPadAnswerBox: 'Right-padded answer box',
+    Yes: 'Yes',
+    No: 'No'
   }
 } as const;
 

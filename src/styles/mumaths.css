@@ -627,9 +627,13 @@ nav .links .link h2 {
     cursor: text;
     font-family: 'IBM Plex Mono', monospace;
     font-size: 60px;
-    text-align: end;
     padding-left: 5px;
+    padding-right: 5px;
+}
+
+#game #ingame.active #answer.padRight {
     padding-right: var(--padding-right-answer-box);
+    text-align: end;
 }
 
 #game #ingame #answer::placeholder {

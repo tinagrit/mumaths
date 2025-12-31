@@ -3,6 +3,7 @@ import { lang } from '../../data/lang';
 import { GameMode, getDigitOptions, getGameModeOptions, getQuestionCompetitiveOptions } from './hooks/typerOptions';
 import { useDocumentTitle } from '../../hooks/useDocumentTitle';
 import { useTyper } from '../../components/typer/TyperProvider';
+import { subscribeToPreferences, getPreferences } from '../../hooks/preferences';
 import {
   ClockIcon,
   CompIcon,
@@ -57,6 +58,7 @@ export default function CalculationPage() {
   useDocumentTitle(lang.metadata.CustomTitle.replace('{page}', lang.features.CalculationMode));
 
   const [answer, setAnswer] = useState('');
+  const [rightPadEnabled, setRightPadEnabled] = useState(() => getPreferences().RightPadAnswerBox);
   const { openTyper } = useTyper();
 
   const [settings, setSettings] = useState<CalculationSettings>(initialSettings);
@@ -65,6 +67,14 @@ export default function CalculationPage() {
   const inGameRef = useRef<HTMLDivElement>(null);
   const questionsRef = useRef<HTMLDivElement>(null);
   const answerRef = useRef<HTMLInputElement>(null);
+
+  useEffect(() => {
+    const unsubscribe = subscribeToPreferences((prefs) => {
+      setRightPadEnabled(prefs.RightPadAnswerBox);
+    });
+
+    return unsubscribe;
+  }, []);
 
   // displayed string value
   const questionValue = useMemo(() => {
@@ -187,12 +197,13 @@ export default function CalculationPage() {
 
     if (questionsRef.current && answerRef.current) {
       const dynamicWidth = Number(answerRef.current.offsetWidth / 2) - Number(questionsRef.current.offsetWidth / 2);
+      console.log('Pad-right answer box:', dynamicWidth);
       document.documentElement.style.setProperty('--padding-right-answer-box', `${dynamicWidth}px`);
     }
 
     if (inGameRef.current) {
       let scrollToY = inGameRef.current.getBoundingClientRect().top;
-      console.log('Scrolling to Y:', scrollToY);
+      console.log('Autoscroll to inGame:', scrollToY);
       setTimeout(() => {
         window.scrollTo({ top: scrollToY, behavior: 'smooth' });
       }, 25);
@@ -340,6 +351,7 @@ export default function CalculationPage() {
             onFocus={handleInputFocus}
             ref={answerRef}
             pattern="-?[0-9]*"
+            className={rightPadEnabled ? 'padRight' : ''}
           />
           <div className="answerCta"><PlayIcon /><p className="hideOnSmall">START</p></div>
         </div>

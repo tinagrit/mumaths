@@ -31,6 +31,7 @@ export default function TyperModal() {
       setDisplayedRequest(request);
       setIsActive(true);
       window.setTimeout(() => setHasOpacity(true), 10);
+      console.log('request', request);
     } else {
       setHasOpacity(false);
       window.setTimeout(() => {
@@ -82,7 +83,10 @@ export default function TyperModal() {
     if (!displayedRequest || displayedRequest?.type !== 'list') return;
 
     displayedRequest.onSelect(option);
-    closeTyper();
+
+    if (!displayedRequest.keepTyperOnSelect) {
+      closeTyper();
+    }
   };
 
   // err msg for bad input

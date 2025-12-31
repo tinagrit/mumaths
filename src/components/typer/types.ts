@@ -7,11 +7,15 @@ export type TyperListOption = {
   icon?: ReactNode;
   selected?: boolean;
   searchTerms?: string[];
+  expandable?: boolean;
+  expansion?: () => TyperListOption[];
+  callback?: () => void;
 };
 
 export type TyperListRequest = {
   type: 'list';
   label: string;
+  keepTyperOnSelect?: boolean;
   options: TyperListOption[];
   allowSearch?: boolean;
   onSelect: (option: TyperListOption) => void;
