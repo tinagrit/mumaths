@@ -205,7 +205,7 @@ export default function CalculationPage() {
     }
 
     if (inGameRef.current) {
-      let scrollToY = inGameRef.current.getBoundingClientRect().top;
+      let scrollToY = inGameRef.current.getBoundingClientRect().top + window.scrollY;
       console.log('Autoscroll to inGame:', scrollToY);
       setTimeout(() => {
         window.scrollTo({ top: scrollToY, behavior: 'smooth' });
@@ -352,6 +352,7 @@ export default function CalculationPage() {
             onChange={(event) => setAnswer(event.target.value)}
             onKeyDown={handleAnswerKeyDown}
             onFocus={handleInputFocus}
+            onBlur={() => window.scrollTo({ top: 0, left: 0, behavior: "smooth" })}
             ref={answerRef}
             pattern="-?[0-9]*"
             className={(rightPadEnabled ? 'padRight' : '') + (monospacedNumbersEnabled ? ' monospaced' : '')}
