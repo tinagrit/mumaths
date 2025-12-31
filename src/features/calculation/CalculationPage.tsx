@@ -58,7 +58,6 @@ export default function CalculationPage() {
   useDocumentTitle(lang.metadata.CustomTitle.replace('{page}', lang.features.CalculationMode));
 
   const [answer, setAnswer] = useState('');
-  const [rightPadEnabled, setRightPadEnabled] = useState(() => getPreferences().RightPadAnswerBox);
   const { openTyper } = useTyper();
 
   const [settings, setSettings] = useState<CalculationSettings>(initialSettings);
@@ -68,9 +67,13 @@ export default function CalculationPage() {
   const questionsRef = useRef<HTMLDivElement>(null);
   const answerRef = useRef<HTMLInputElement>(null);
 
+  const [rightPadEnabled, setRightPadEnabled] = useState(() => getPreferences().RightPadAnswerBox);
+  const [monospacedNumbersEnabled, setMonospacedNumbersEnabled] = useState(() => getPreferences().MonospacedNumbers);
+
   useEffect(() => {
     const unsubscribe = subscribeToPreferences((prefs) => {
       setRightPadEnabled(prefs.RightPadAnswerBox);
+      setMonospacedNumbersEnabled(prefs.MonospacedNumbers);
     });
 
     return unsubscribe;
@@ -277,7 +280,7 @@ export default function CalculationPage() {
             tabIndex={0}
             onClick={handleModeChange}
           >
-            <h1 className="input mono">{modeIcons[settings.mode]}</h1>
+            <h1 className={"input" + (monospacedNumbersEnabled ? " mono" : "")}>{modeIcons[settings.mode]}</h1>
             <p className="desc">{lang.gamemode.ModeSmall}</p>
           </div>
           <div
@@ -287,7 +290,7 @@ export default function CalculationPage() {
             tabIndex={0}
             onClick={handleQuestionConfig}
           >
-            <h1 className="input mono">{questionValue}</h1>
+            <h1 className={"input" + (monospacedNumbersEnabled ? " mono" : "")}>{questionValue}</h1>
             <p className="desc">
               {settings.mode === 'time'
                 ? lang.gamemode.TimeSmall
@@ -303,7 +306,7 @@ export default function CalculationPage() {
             tabIndex={0}
             onClick={handleDigitChange}
           >
-            <h1 className="input mono">{settings.digitRange}</h1>
+            <h1 className={"input" + (monospacedNumbersEnabled ? " mono" : "")}>{settings.digitRange}</h1>
             <p className="desc">{lang.gamemode.DigitSmall}</p>
           </div>
         </div>
@@ -331,11 +334,11 @@ export default function CalculationPage() {
         </div>
 
         <div id="question" className="fullWhenActive" ref={questionsRef}>
-          <h1 id="firstNumber" className="questionNumber firstNumber mono">
+          <h1 id="firstNumber" className={"questionNumber firstNumber" + (monospacedNumbersEnabled ? " mono" : "")}>
             {numberFormatter.format(game.operands[0])}
           </h1>
           <p id="operationSymbol" className="mono">{operationSymbol(game.operation)}</p>
-          <h1 id="secondNumber" className="questionNumber secondNumber mono">
+          <h1 id="secondNumber" className={"questionNumber secondNumber" + (monospacedNumbersEnabled ? " mono" : "")}>
             {numberFormatter.format(game.operands[1])}
           </h1>
         </div>
@@ -351,7 +354,7 @@ export default function CalculationPage() {
             onFocus={handleInputFocus}
             ref={answerRef}
             pattern="-?[0-9]*"
-            className={rightPadEnabled ? 'padRight' : ''}
+            className={(rightPadEnabled ? 'padRight' : '') + (monospacedNumbersEnabled ? ' monospaced' : '')}
           />
           <div className="answerCta"><PlayIcon /><p className="hideOnSmall">START</p></div>
         </div>
