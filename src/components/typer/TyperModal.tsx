@@ -246,6 +246,9 @@ export default function TyperModal() {
                 }
               }
             }}
+            onTouchStart={() => {
+              inputRef.current?.focus();
+            }}
             ref={inputRef}
           />
           <div

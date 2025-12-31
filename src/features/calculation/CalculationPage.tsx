@@ -62,6 +62,7 @@ export default function CalculationPage() {
   const [settings, setSettings] = useState<CalculationSettings>(initialSettings);
   const game = useCalculationGame(settings);
 
+  const inGameRef = useRef<HTMLDivElement>(null);
   const questionsRef = useRef<HTMLDivElement>(null);
   const answerRef = useRef<HTMLInputElement>(null);
 
@@ -139,6 +140,8 @@ export default function CalculationPage() {
         }));
       }
     });
+
+    document.getElementById('typerinput')?.focus();
   };
 
   const handleDigitChange = () => {
@@ -185,6 +188,14 @@ export default function CalculationPage() {
     if (questionsRef.current && answerRef.current) {
       const dynamicWidth = Number(answerRef.current.offsetWidth / 2) - Number(questionsRef.current.offsetWidth / 2);
       document.documentElement.style.setProperty('--padding-right-answer-box', `${dynamicWidth}px`);
+    }
+
+    if (inGameRef.current) {
+      let scrollToY = inGameRef.current.getBoundingClientRect().top;
+      console.log('Scrolling to Y:', scrollToY);
+      setTimeout(() => {
+        window.scrollTo({ top: scrollToY, behavior: 'smooth' });
+      }, 25);
     }
   };
 
@@ -287,7 +298,7 @@ export default function CalculationPage() {
         </div>
       </div>
 
-      <div id="ingame" className={game.isPlaying ? 'active' : ''}>
+      <div id="ingame" className={game.isPlaying ? 'active' : ''} ref={inGameRef}>
         <div id="ingamestat" className="onWhenActive">
           <div id="counter" className="valNextToImg">
             <CounterIcon className="statsvg" />
@@ -328,6 +339,7 @@ export default function CalculationPage() {
             onKeyDown={handleAnswerKeyDown}
             onFocus={handleInputFocus}
             ref={answerRef}
+            pattern="-?[0-9]*"
           />
           <div className="answerCta"><PlayIcon /><p className="hideOnSmall">START</p></div>
         </div>

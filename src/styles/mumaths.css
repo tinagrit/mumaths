@@ -487,8 +487,8 @@ nav .links .link h2 {
     transform: translateY(calc(-30% + 30px));
     left: 0;
     right: 0; */
-    margin: 0 auto;
-    padding: 50px 0;
+    margin: 50px auto;
+    padding: 0;
     z-index: 3;
 }
 
@@ -673,5 +673,18 @@ nav .links .link h2 {
 
     #game #ingame .statsvg:not(.keepOnSmall) {
         display: none;
+    }
+
+    .menubar a {
+        transition: color 0.3s, background-color 0.3s;
+    }
+
+    .menubar a:hover:not(.menubar a.inactive) {
+        background-color: transparent;
+        color: rgba(var(--neutral));
+    }
+
+    .menubar a.svg:not(.inactive):hover>svg .main {
+        fill: rgba(var(--neutral));
     }
 }
