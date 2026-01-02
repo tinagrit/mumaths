@@ -45,23 +45,29 @@ const modeIcons: Record<GameMode, JSX.Element> = {
   competitive: <CompIcon />
 };
 
-// ms to hh:mm:ss
+// ms to mm:ss.hundredths
 const formatTime = (milliseconds: number) => {
   const totalSeconds = Math.floor(milliseconds / 1000);
-  const hours = String(Math.floor(totalSeconds / 3600)).padStart(2, '0');
-  const minutes = String(Math.floor((totalSeconds % 3600) / 60)).padStart(2, '0');
+  const minutes = String(Math.floor(totalSeconds / 60)).padStart(2, '0');
   const seconds = String(totalSeconds % 60).padStart(2, '0');
-  return `${hours}:${minutes}:${seconds}`;
+  const hundredths = String(Math.floor((milliseconds % 1000) / 10)).padStart(2, '0');
+  return `${minutes}:${seconds}.${hundredths}`;
 };
 
 export default function CalculationPage() {
   useDocumentTitle(lang.metadata.CustomTitle.replace('{page}', lang.features.CalculationMode));
 
   const [answer, setAnswer] = useState('');
+  const [showResults, setShowResults] = useState(false);
   const { openTyper } = useTyper();
 
   const [settings, setSettings] = useState<CalculationSettings>(initialSettings);
-  const game = useCalculationGame(settings);
+  const game = useCalculationGame(settings, (stats) => {
+    if (showResults) return;
+    
+    setShowResults(true);
+    console.log('Game ended. Stat:', stats);
+  });
 
   const inGameRef = useRef<HTMLDivElement>(null);
   const questionsRef = useRef<HTMLDivElement>(null);
@@ -316,20 +322,20 @@ export default function CalculationPage() {
         <div id="ingamestat" className="onWhenActive">
           <div id="counter" className="valNextToImg">
             <CounterIcon className="statsvg" />
-            <p className="statvalue">{questionProgressDisplay}</p>
+            <p className={"statvalue" + (monospacedNumbersEnabled ? " mono" : "")}>{questionProgressDisplay}</p>
           </div>
 
           <div id="timer" className="valNextToImg">
             <TimerStatIcon className="statsvg" />
-            <p className="statvalue">{formatTime(game.elapsedMs)}</p>
+            <p className={"statvalue" + (monospacedNumbersEnabled ? " mono" : "")}>{formatTime(game.elapsedMs)}</p>
           </div>
 
           <div id="score" className="valNextToImg">
             <ScoreSuccessIcon className="statsvg keepOnSmall" />
-            <p className="statvalue mgright">{game.score.correct}</p>
+            <p className={"statvalue mgright" + (monospacedNumbersEnabled ? " mono" : "")}>{game.score.correct}</p>
 
             <ScoreFailureIcon className="statsvg" />
-            <p className="statvalue hideOnSmall">{game.score.incorrect}</p>
+            <p className={"statvalue hideOnSmall" + (monospacedNumbersEnabled ? " mono" : "")}>{game.score.incorrect}</p>
           </div>
         </div>
 

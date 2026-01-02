@@ -96,12 +96,13 @@ const calculateAnswer = (operation: Operation, [a, b]: [number, number]) => {
   }
 };
 
-export function useCalculationGame(settings: CalculationSettings) {
+export function useCalculationGame(settings: CalculationSettings, onGameEnd?: (stats: { score: CalculationScore; questionProgress: { answered: number; target: number | null }; elapsedMs: number }) => void) {
   const [isPlaying, setIsPlaying] = useState(false);
   const [operands, setOperands] = useState<[number, number]>(() => generateOperands(settings.digitRange, settings.operation === 'division', false));
   const [currentOperation, setCurrentOperation] = useState<Operation>(pickOperation(settings.operation));
   const [score, setScore] = useState<CalculationScore>({ correct: 0, incorrect: 0 });
   const [questionsAnswered, setQuestionsAnswered] = useState(0);
+  const [startTime, setStartTime] = useState<number | null>(null);
   const [elapsedMs, setElapsedMs] = useState(0);
 
   const targetQuestions = settings.mode === 'question' ? settings.questionLimit : Infinity;
@@ -112,12 +113,20 @@ export function useCalculationGame(settings: CalculationSettings) {
   }, [settings.digitRange, settings.operation]);
 
   const stopGame = useCallback(() => {
+    if (isPlaying) {
+      const questionProgress = {
+        answered: questionsAnswered,
+        target: Number.isFinite(targetQuestions) ? targetQuestions : null
+      };
+      onGameEnd?.({ score, questionProgress, elapsedMs });
+    }
     setIsPlaying(false);
-  }, []);
+  }, [isPlaying, score, questionsAnswered, targetQuestions, elapsedMs, onGameEnd]);
 
   const startGame = useCallback(() => {
     setScore({ correct: 0, incorrect: 0 });
     setQuestionsAnswered(0);
+    setStartTime(Date.now());
     setElapsedMs(0);
     prepareNextQuestion();
     setIsPlaying(true);
@@ -146,14 +155,14 @@ export function useCalculationGame(settings: CalculationSettings) {
   );
 
   useEffect(() => {
-    if (!isPlaying) {
+    if (!isPlaying || startTime === null) {
       return;
     }
     const interval = setInterval(() => {
-      setElapsedMs((ms) => ms + 1000);
-    }, 1000);
+      setElapsedMs(Date.now() - startTime);
+    }, 50);
     return () => clearInterval(interval);
-  }, [isPlaying]);
+  }, [isPlaying, startTime]);
 
   useEffect(() => {
     if (!isPlaying) {
