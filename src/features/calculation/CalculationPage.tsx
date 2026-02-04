@@ -59,12 +59,19 @@ export default function CalculationPage() {
 
   const [answer, setAnswer] = useState('');
   const [showResults, setShowResults] = useState(false);
+  const [results, setResults] = useState<{
+    score: { correct: number; incorrect: number };
+    questionProgress: { answered: number; target: number | null };
+    elapsedMs: number;
+  } | null>(null);
+  const [answerFeedback, setAnswerFeedback] = useState<'correct' | 'incorrect' | null>(null);
   const { openTyper } = useTyper();
 
   const [settings, setSettings] = useState<CalculationSettings>(initialSettings);
   const game = useCalculationGame(settings, (stats) => {
     if (showResults) return;
-    
+
+    setResults(stats);
     setShowResults(true);
     console.log('Game ended. Stat:', stats);
   });
@@ -73,16 +80,29 @@ export default function CalculationPage() {
   const questionsRef = useRef<HTMLDivElement>(null);
   const answerRef = useRef<HTMLInputElement>(null);
 
+  // stores setTimeout
+  const feedbackTimeoutRef = useRef<number | null>(null);
+
   const [rightPadEnabled, setRightPadEnabled] = useState(() => getPreferences().RightPadAnswerBox);
   const [monospacedNumbersEnabled, setMonospacedNumbersEnabled] = useState(() => getPreferences().MonospacedNumbers);
+  const [flashAnswerFeedback, setFlashAnswerFeedback] = useState(() => getPreferences().FlashAnswerFeedback);
 
   useEffect(() => {
     const unsubscribe = subscribeToPreferences((prefs) => {
       setRightPadEnabled(prefs.RightPadAnswerBox);
       setMonospacedNumbersEnabled(prefs.MonospacedNumbers);
+      setFlashAnswerFeedback(prefs.FlashAnswerFeedback);
     });
 
     return unsubscribe;
+  }, []);
+
+  useEffect(() => {
+    return () => {
+      if (feedbackTimeoutRef.current !== null) {
+        window.clearTimeout(feedbackTimeoutRef.current);
+      }
+    };
   }, []);
 
   // displayed string value
@@ -98,14 +118,14 @@ export default function CalculationPage() {
 
   // user chooses new operation
   const handleOperationChange = (operation: Operation) => {
-    if (settings.mode === 'competitive' || game.isPlaying) return;
+    if (settings.mode === 'competitive' || game.isPlaying || showResults) return;
 
     setSettings((prev) => ({ ...prev, operation }));
   };
 
   // user clicks to change mode
   const handleModeChange = () => {
-    if (game.isPlaying) return;
+    if (game.isPlaying || showResults) return;
 
     openTyper({
       type: 'list',
@@ -126,7 +146,7 @@ export default function CalculationPage() {
 
   // user clicks to choose question limit
   const handleQuestionConfig = () => {
-    if (settings.mode === 'infinity' || game.isPlaying) return;
+    if (settings.mode === 'infinity' || game.isPlaying || showResults) return;
 
     if (settings.mode == 'competitive') {
       openTyper({
@@ -164,7 +184,7 @@ export default function CalculationPage() {
   };
 
   const handleDigitChange = () => {
-    if (game.isPlaying) return;
+    if (game.isPlaying || showResults) return;
 
     openTyper({
       type: 'list',
@@ -185,7 +205,16 @@ export default function CalculationPage() {
       return;
     }
 
-    game.submitAnswer(value);
+    const result = game.submitAnswer(value);
+    if (result && flashAnswerFeedback) {
+      setAnswerFeedback(result.correct ? 'correct' : 'incorrect');
+      if (feedbackTimeoutRef.current !== null) {
+        window.clearTimeout(feedbackTimeoutRef.current);
+      }
+      feedbackTimeoutRef.current = window.setTimeout(() => {
+        setAnswerFeedback(null);
+      }, 350);
+    }
     setAnswer('');
   };
 
@@ -201,6 +230,10 @@ export default function CalculationPage() {
 
   const handleInputFocus = () => {
     if (!game.isPlaying) {
+      if (showResults) {
+        setShowResults(false);
+        setResults(null);
+      }
       game.startGame();
     }
 
@@ -266,7 +299,7 @@ export default function CalculationPage() {
               <a
                 key={operation.id}
                 data-menu={operation.id}
-                className={settings.mode === 'competitive' || game.isPlaying ? className + ' inactive' : className}
+                className={settings.mode === 'competitive' || game.isPlaying || showResults ? className + ' inactive' : className}
                 href="#"
                 onClick={(event) => {
                   event.preventDefault();
@@ -280,7 +313,7 @@ export default function CalculationPage() {
         </div>
         <div className="spacer">
           <div
-            className={"config" + (game.isPlaying ? ' inactive' : '')}
+            className={"config" + (game.isPlaying || showResults ? ' inactive' : '')}
             id="chooseModeBtn"
             role="button"
             tabIndex={0}
@@ -290,7 +323,7 @@ export default function CalculationPage() {
             <p className="desc">{lang.gamemode.ModeSmall}</p>
           </div>
           <div
-            className={"config" + (settings.mode === 'infinity' || game.isPlaying ? ' inactive' : '')}
+            className={"config" + (settings.mode === 'infinity' || game.isPlaying || showResults ? ' inactive' : '')}
             id="chooseQuesBtn"
             role="button"
             tabIndex={0}
@@ -306,7 +339,7 @@ export default function CalculationPage() {
             </p>
           </div>
           <div
-            className={"config" + (game.isPlaying ? ' inactive' : '')}
+            className={"config" + (game.isPlaying || showResults ? ' inactive' : '')}
             id="chooseDigitBtn"
             role="button"
             tabIndex={0}
@@ -318,7 +351,7 @@ export default function CalculationPage() {
         </div>
       </div>
 
-      <div id="ingame" className={game.isPlaying ? 'active' : ''} ref={inGameRef}>
+      <div id="ingame" className={`${game.isPlaying ? 'active' : ''}${showResults ? ' fadeout' : ''}`} ref={inGameRef}>
         <div id="ingamestat" className="onWhenActive">
           <div id="counter" className="valNextToImg">
             <CounterIcon className="statsvg" />
@@ -330,12 +363,12 @@ export default function CalculationPage() {
             <p className={"statvalue" + (monospacedNumbersEnabled ? " mono" : "")}>{formatTime(game.elapsedMs)}</p>
           </div>
 
-          <div id="score" className="valNextToImg">
-            <ScoreSuccessIcon className="statsvg keepOnSmall" />
-            <p className={"statvalue mgright" + (monospacedNumbersEnabled ? " mono" : "")}>{game.score.correct}</p>
+          <div id="score" className={"valNextToImg" + (answerFeedback ? ` flash-${answerFeedback}` : '')}>
+            <ScoreSuccessIcon className="statsvg keepOnSmall correctsvg" />
+            <p className={"correctnum statvalue mgright" + (monospacedNumbersEnabled ? " mono" : "")}>{game.score.correct}</p>
 
-            <ScoreFailureIcon className="statsvg" />
-            <p className={"statvalue hideOnSmall" + (monospacedNumbersEnabled ? " mono" : "")}>{game.score.incorrect}</p>
+            <ScoreFailureIcon className="statsvg incorrectsvg" />
+            <p className={"incorrectnum statvalue hideOnSmall" + (monospacedNumbersEnabled ? " mono" : "")}>{game.score.incorrect}</p>
           </div>
         </div>
 
@@ -361,7 +394,11 @@ export default function CalculationPage() {
             onBlur={() => window.scrollTo({ top: 0, left: 0, behavior: "smooth" })}
             ref={answerRef}
             pattern="-?[0-9]*"
-            className={(rightPadEnabled ? 'padRight' : '') + (monospacedNumbersEnabled ? ' monospaced' : '')}
+            className={
+              (rightPadEnabled ? 'padRight' : '') +
+              (monospacedNumbersEnabled ? ' monospaced' : '') +
+              (answerFeedback ? ` flash-${answerFeedback}` : '')
+            }
           />
           <div className="answerCta"><PlayIcon /><p className="hideOnSmall">START</p></div>
         </div>
@@ -386,12 +423,56 @@ export default function CalculationPage() {
             onClick={() => {
               game.restartGame();
               setAnswer('');
+              setShowResults(false);
+              setResults(null);
             }}
           >
             <RestartIcon className="buttonsvg" />
             <p className="buttontext">Restart</p>
           </div>
         </div>
+      </div>
+      <div id="results" className={showResults ? 'active' : ''} aria-hidden={!showResults}>
+        {results && (
+          <>
+            <h2>Results</h2>
+            <div className="resultrow">
+              <span className="label">Correct</span>
+              <span className="value">{results.score.correct}</span>
+            </div>
+            <div className="resultrow">
+              <span className="label">Incorrect</span>
+              <span className="value">{results.score.incorrect}</span>
+            </div>
+            <div className="resultrow">
+              <span className="label">Answered</span>
+              <span className="value">
+                {results.questionProgress.answered}
+                {results.questionProgress.target !== null ? ` / ${results.questionProgress.target}` : ''}
+              </span>
+            </div>
+            <div className="resultrow">
+              <span className="label">Time</span>
+              <span className="value">{formatTime(results.elapsedMs)}</span>
+            </div>
+
+            <div id="resultsactions" className="onWhenActive">
+              <div
+                className="actionbutton"
+                role="button"
+                tabIndex={0}
+                onClick={() => {
+                  setAnswer('');
+                  setShowResults(false);
+                  setResults(null);
+                }}
+              >
+                <ExitIcon className="buttonsvg" />
+                <p className="buttontext">Next</p>
+              </div>
+            </div>
+          </>
+        )}
       </div>
     </>
   );

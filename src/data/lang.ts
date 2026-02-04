@@ -65,6 +65,7 @@ export const lang = {
     Title: 'Preferences',
     RightPadAnswerBox: 'Right-padded answer box',
     MonospacedNumbers: 'Monospaced numbers',
+    FlashAnswerFeedback: 'Flash answer feedback',
     Yes: 'Yes',
     No: 'No'
   }

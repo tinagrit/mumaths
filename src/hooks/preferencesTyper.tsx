@@ -56,6 +56,23 @@ export const monospacedNumbersOption: PreferencesOption[] = [
   }
 ];
 
+export const flashAnswerFeedbackOption: PreferencesOption[] = [
+  { 
+    id: 'true', 
+    label: lang.preferences.Yes, 
+    searchTerms: ['yes', 'true'], 
+    expandable: false,
+    callback: () => setPreference('FlashAnswerFeedback', true)
+  },
+  { 
+    id: 'false', 
+    label: lang.preferences.No, 
+    searchTerms: ['no', 'false'], 
+    expandable: false,
+    callback: () => setPreference('FlashAnswerFeedback', false)
+  }
+];
+
 export const getExpansion = (expansion?: PreferencesOption[], preferenceKey?: keyof Preferences): TyperListOption[] => {
   if (!expansion) return [];
   const prefs = getPreferences();
@@ -85,6 +102,13 @@ export const mainOptions: PreferencesOption[] = [
     searchTerms: ['monospaced numbers digits'],
     expandable: true,
     expansion: () => getExpansion(monospacedNumbersOption, 'MonospacedNumbers')
+  },
+  {
+    id: 'FlashAnswerFeedback',
+    label: lang.preferences.FlashAnswerFeedback,
+    searchTerms: ['flash answer feedback'],
+    expandable: true,
+    expansion: () => getExpansion(flashAnswerFeedbackOption, 'FlashAnswerFeedback')
   }
 ];
 

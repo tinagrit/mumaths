@@ -1,13 +1,15 @@
 export interface Preferences {
   RightPadAnswerBox: boolean;
   MonospacedNumbers: boolean;
+  FlashAnswerFeedback: boolean;
 }
 
 const STORAGE_KEY = 'mumaths_preferences';
 
 const defaultPreferences: Preferences = {
   RightPadAnswerBox: true,
-  MonospacedNumbers: true
+  MonospacedNumbers: true,
+  FlashAnswerFeedback: true
 };
 
 type PreferenceSubscriber = (prefs: Preferences) => void;
