@@ -67,21 +67,23 @@ export default function CalculationPage() {
   const [answerFeedback, setAnswerFeedback] = useState<'correct' | 'incorrect' | null>(null);
   const { openTyper } = useTyper();
 
-  const [settings, setSettings] = useState<CalculationSettings>(initialSettings);
-  const game = useCalculationGame(settings, (stats) => {
-    if (showResults) return;
-
-    setResults(stats);
-    setShowResults(true);
-    console.log('Game ended. Stat:', stats);
-  });
-
   const inGameRef = useRef<HTMLDivElement>(null);
   const questionsRef = useRef<HTMLDivElement>(null);
   const answerRef = useRef<HTMLInputElement>(null);
 
   // stores setTimeout
   const feedbackTimeoutRef = useRef<number | null>(null);
+
+  const [settings, setSettings] = useState<CalculationSettings>(initialSettings);
+  const game = useCalculationGame(settings, (stats) => {
+    if (showResults) return;
+
+    setResults(stats);
+    setShowResults(true);
+    if (answerRef.current) answerRef.current.blur();
+
+    console.log('Game ended. Stat:', stats);
+  });
 
   const [rightPadEnabled, setRightPadEnabled] = useState(() => getPreferences().RightPadAnswerBox);
   const [monospacedNumbersEnabled, setMonospacedNumbersEnabled] = useState(() => getPreferences().MonospacedNumbers);

@@ -493,7 +493,7 @@ nav .links .link h2 {
     opacity: 1;
     max-height: 1200px;
     overflow: hidden;
-    transition: opacity 0.35s, max-height 0.35s 0.15s, margin 0.35s 0.15s;
+    transition: opacity 0.35s;
 }
 
 #game #ingame.fadeout {
