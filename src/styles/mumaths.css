@@ -773,3 +773,8 @@ nav .links .link h2 {
         fill: rgba(var(--neutral));
     }
 }
+
+.noanimation,
+.noanimation * {
+    transition: none !important;
+}

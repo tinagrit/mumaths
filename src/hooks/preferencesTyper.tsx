@@ -73,6 +73,23 @@ export const flashAnswerFeedbackOption: PreferencesOption[] = [
   }
 ];
 
+export const animationOption: PreferencesOption[] = [
+  { 
+    id: 'true', 
+    label: lang.preferences.Yes, 
+    searchTerms: ['yes', 'true'], 
+    expandable: false,
+    callback: () => setPreference('Animation', true)
+  },
+  { 
+    id: 'false', 
+    label: lang.preferences.No, 
+    searchTerms: ['no', 'false'], 
+    expandable: false,
+    callback: () => setPreference('Animation', false)
+  }
+];
+
 export const getExpansion = (expansion?: PreferencesOption[], preferenceKey?: keyof Preferences): TyperListOption[] => {
   if (!expansion) return [];
   const prefs = getPreferences();
@@ -109,6 +126,13 @@ export const mainOptions: PreferencesOption[] = [
     searchTerms: ['flash answer feedback'],
     expandable: true,
     expansion: () => getExpansion(flashAnswerFeedbackOption, 'FlashAnswerFeedback')
+  },
+  {
+    id: 'Animation',
+    label: lang.preferences.Animation,
+    searchTerms: ['animation'],
+    expandable: true,
+    expansion: () => getExpansion(animationOption, 'Animation')
   }
 ];
 

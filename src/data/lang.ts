@@ -66,6 +66,7 @@ export const lang = {
     RightPadAnswerBox: 'Right-padded answer box',
     MonospacedNumbers: 'Monospaced numbers',
     FlashAnswerFeedback: 'Flash answer feedback',
+    Animation: 'Game animation',
     Yes: 'Yes',
     No: 'No'
   }

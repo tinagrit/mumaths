@@ -88,12 +88,14 @@ export default function CalculationPage() {
   const [rightPadEnabled, setRightPadEnabled] = useState(() => getPreferences().RightPadAnswerBox);
   const [monospacedNumbersEnabled, setMonospacedNumbersEnabled] = useState(() => getPreferences().MonospacedNumbers);
   const [flashAnswerFeedback, setFlashAnswerFeedback] = useState(() => getPreferences().FlashAnswerFeedback);
+  const [animationOn, setAnimationOn] = useState(() => getPreferences().Animation);
 
   useEffect(() => {
     const unsubscribe = subscribeToPreferences((prefs) => {
       setRightPadEnabled(prefs.RightPadAnswerBox);
       setMonospacedNumbersEnabled(prefs.MonospacedNumbers);
       setFlashAnswerFeedback(prefs.FlashAnswerFeedback);
+      setAnimationOn(prefs.Animation);
     });
 
     return unsubscribe;
@@ -271,7 +273,7 @@ export default function CalculationPage() {
 
   return (
     <>
-      <div id="configbar">
+      <div id="configbar" className={animationOn ? '' : 'noanimation'}>
         <div className="menubar" id="chooseoper">
           {operationButtons.map((operation) => {
             const className =
@@ -353,7 +355,7 @@ export default function CalculationPage() {
         </div>
       </div>
 
-      <div id="ingame" className={`${game.isPlaying ? 'active' : ''}${showResults ? ' fadeout' : ''}`} ref={inGameRef}>
+      <div id="ingame" className={`${game.isPlaying ? 'active' : ''}${showResults ? ' fadeout' : ''}${animationOn ? '' : ' noanimation'}`} ref={inGameRef}>
         <div id="ingamestat" className="onWhenActive">
           <div id="counter" className="valNextToImg">
             <CounterIcon className="statsvg" />
@@ -434,7 +436,7 @@ export default function CalculationPage() {
           </div>
         </div>
       </div>
-      <div id="results" className={showResults ? 'active' : ''} aria-hidden={!showResults}>
+      <div id="results" className={`${showResults ? 'active' : ''}${animationOn ? '' : ' noanimation'}`} aria-hidden={!showResults}>
         {results && (
           <>
             <h2>Results</h2>
