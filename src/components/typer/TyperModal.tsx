@@ -233,7 +233,7 @@ export default function TyperModal() {
         }}
       >
         <h1>
-          {lang.typer.SetToInput} <strong>{inputValue}</strong>
+          {lang.typer.SetToInput} <strong>{displayedRequest.valueDisplayParser ? displayedRequest.valueDisplayParser(inputValue) : inputValue}</strong>
         </h1>
         {displayedRequest.helperText ? <p>{displayedRequest.helperText}</p> : null}
       </div>

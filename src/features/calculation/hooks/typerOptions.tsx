@@ -1,6 +1,7 @@
 import { ClockIcon, InfinityIcon, CompIcon, QuestionIcon } from '../../../components/icons';
 import { TyperListOption } from '../../../components/typer/types';
 import { lang } from '../../../data/lang';
+import { formatTimeHumanReadableLong } from '../CalculationPage';
 
 export type GameMode = 'question' | 'time' | 'infinity' | 'competitive';
 
@@ -129,7 +130,7 @@ export const getRangeSuggestions = (current: number, mode: GameMode): TyperListO
   return timeLimitRangeSuggestions.map((option) => ({
     id: option.id,
     title: undefined,
-    description: `${option.label}`.trim(),
+    description: `${formatTimeHumanReadableLong(parseInt(option.label, 10))}`.trim(),
     selected: Number(option.id) === current,
     searchTerms: option.searchTerms
   }));

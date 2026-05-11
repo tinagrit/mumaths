@@ -25,6 +25,7 @@ export type TyperInputRequest = {
   type: 'input';
   label: string;
   keepTyperOnSelect?: boolean;
+  valueDisplayParser?: (value: string) => string;
   helperText?: string;
   placeholder?: string;
   initialValue?: string;

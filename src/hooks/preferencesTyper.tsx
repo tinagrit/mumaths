@@ -90,6 +90,23 @@ export const animationOption: PreferencesOption[] = [
   }
 ];
 
+export const secondsOnlyDisplayOption: PreferencesOption[] = [
+  { 
+    id: 'true', 
+    label: lang.preferences.Yes, 
+    searchTerms: ['yes', 'true'], 
+    expandable: false,
+    callback: () => setPreference('SecondsOnlyDisplay', true)
+  },
+  { 
+    id: 'false', 
+    label: lang.preferences.No, 
+    searchTerms: ['no', 'false'], 
+    expandable: false,
+    callback: () => setPreference('SecondsOnlyDisplay', false)
+  }
+];
+
 export const getExpansion = (expansion?: PreferencesOption[], preferenceKey?: keyof Preferences): TyperListOption[] => {
   if (!expansion) return [];
   const prefs = getPreferences();
@@ -133,6 +150,13 @@ export const mainOptions: PreferencesOption[] = [
     searchTerms: ['animation'],
     expandable: true,
     expansion: () => getExpansion(animationOption, 'Animation')
+  },
+  {
+    id: 'SecondsOnlyDisplay',
+    label: lang.preferences.SecondsOnlyDisplay,
+    searchTerms: ['seconds only display'],
+    expandable: true,
+    expansion: () => getExpansion(secondsOnlyDisplayOption, 'SecondsOnlyDisplay')
   }
 ];
 

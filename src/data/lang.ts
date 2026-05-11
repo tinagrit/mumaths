@@ -47,6 +47,8 @@ export const lang = {
     TimeTitle: 'Time',
     TimeDesc: 'The game stops after a time limit',
     TimeSearch: 'Time Seconds Countdown',
+    TimeSuffixSingular: 'second',
+    TimeSuffixPlural: 'seconds',
     TimeAsk: 'Please enter the countdown duration in seconds',
     TimeSmall: 'TIME',
     InfinityTitle: 'Infinity',
@@ -62,12 +64,24 @@ export const lang = {
     CompSearch: 'Competitive Comp Fixed',
     CompDefault: 'Default'
   },
+  units: {
+    SecondSingular: 'second',
+    SecondPlural: 'seconds',
+    SecondShort: 's',
+    MinuteSingular: 'minute',
+    MinutePlural: 'minutes',
+    MinuteShort: 'm',
+    HourSingular: 'hour',
+    HourPlural: 'hours',
+    HourShort: 'h'
+  },
   preferences: {
     Title: 'Preferences',
     RightPadAnswerBox: 'Right-padded answer box',
     MonospacedNumbers: 'Monospaced numbers',
     FlashAnswerFeedback: 'Flash answer feedback',
     Animation: 'Game animation',
+    SecondsOnlyDisplay: 'Display options in seconds only',
     Yes: 'Yes',
     No: 'No'
   }

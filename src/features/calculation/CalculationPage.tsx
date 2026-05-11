@@ -54,6 +54,59 @@ const formatTime = (milliseconds: number) => {
   return `${minutes}:${seconds}.${hundredths}`;
 };
 
+export function formatTimeHumanReadableLong(seconds: number, secondsOnlyDisplay: boolean = getPreferences().SecondsOnlyDisplay) {
+  if (secondsOnlyDisplay) {
+    return seconds === 1 ? `${seconds} ${lang.units.SecondSingular}` : `${seconds} ${lang.units.SecondPlural}`;
+  }
+  
+  const parts = [
+    {
+      value: Math.floor(seconds / 3600),
+      singular: lang.units.HourSingular,
+      plural: lang.units.HourPlural
+    },
+    {
+      value: Math.floor((seconds % 3600) / 60),
+      singular: lang.units.MinuteSingular,
+      plural: lang.units.MinutePlural
+    },
+    {
+      value: seconds % 60,
+      singular: lang.units.SecondSingular,
+      plural: lang.units.SecondPlural
+    }
+  ];
+
+  return parts
+    .filter((part) => part.value > 0)
+    .map((part) => `${part.value} ${part.value === 1 ? part.singular : part.plural}`)
+    .join(' ');
+};
+
+export function formatTimeHumanReadableShort(seconds: number, secondsOnlyDisplay: boolean = getPreferences().SecondsOnlyDisplay) {
+  if (secondsOnlyDisplay) return `${seconds}${lang.units.SecondShort}`;
+
+  const parts = [
+    {
+      value: Math.floor(seconds / 3600),
+      unit: lang.units.HourShort
+    },
+    {
+      value: Math.floor((seconds % 3600) / 60),
+      unit: lang.units.MinuteShort
+    },
+    {
+      value: seconds % 60,
+      unit: lang.units.SecondShort
+    }
+  ];
+
+  return parts
+    .filter((part) => part.value > 0)
+    .map((part) => `${part.value}${part.unit}`)
+    .join('');
+};
+
 export default function CalculationPage() {
   useDocumentTitle(lang.metadata.CustomTitle.replace('{page}', lang.features.CalculationMode));
 
@@ -89,6 +142,7 @@ export default function CalculationPage() {
   const [monospacedNumbersEnabled, setMonospacedNumbersEnabled] = useState(() => getPreferences().MonospacedNumbers);
   const [flashAnswerFeedback, setFlashAnswerFeedback] = useState(() => getPreferences().FlashAnswerFeedback);
   const [animationOn, setAnimationOn] = useState(() => getPreferences().Animation);
+  const [secondsOnlyDisplay, setSecondsOnlyDisplay] = useState(() => getPreferences().SecondsOnlyDisplay);
 
   useEffect(() => {
     const unsubscribe = subscribeToPreferences((prefs) => {
@@ -96,6 +150,7 @@ export default function CalculationPage() {
       setMonospacedNumbersEnabled(prefs.MonospacedNumbers);
       setFlashAnswerFeedback(prefs.FlashAnswerFeedback);
       setAnimationOn(prefs.Animation);
+      setSecondsOnlyDisplay(prefs.SecondsOnlyDisplay);
     });
 
     return unsubscribe;
@@ -112,13 +167,13 @@ export default function CalculationPage() {
   // displayed string value
   const questionValue = useMemo(() => {
     if (settings.mode === 'time') {
-      return `${settings.timeLimitSeconds}s`;
+      return `${formatTimeHumanReadableShort(settings.timeLimitSeconds, secondsOnlyDisplay)}`.trim();
     }
     if (settings.mode === 'infinity') {
       return lang.gamemode.QuestionNotAvailable;
     }
     return String(settings.questionLimit);
-  }, [settings.mode, settings.questionLimit, settings.timeLimitSeconds]);
+  }, [settings.mode, settings.questionLimit, settings.timeLimitSeconds, secondsOnlyDisplay]);
 
   // user chooses new operation
   const handleOperationChange = (operation: Operation) => {
@@ -169,6 +224,7 @@ export default function CalculationPage() {
     openTyper({
       type: 'input',
       label: isTime ? lang.gamemode.TimeTitle : lang.gamemode.QuestionTitle,
+      valueDisplayParser: (value) => (isTime ? formatTimeHumanReadableLong(parseInt(value, 10), secondsOnlyDisplay) : value + (parseInt(value, 10) === 1 ? ` ${lang.gamemode.QuestionSuffixSingular}` : ` ${lang.gamemode.QuestionSuffixPlural}`)),
       helperText: isTime ? lang.gamemode.TimeAsk : lang.gamemode.QuestionAsk,
       numbersOnly: true,
       integerOnly: true,
