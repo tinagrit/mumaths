@@ -1,6 +1,6 @@
 import { KeyboardEvent, useEffect, useMemo, useRef, useState } from 'react';
 import { lang } from '../../data/lang';
-import { GameMode, getDigitOptions, getGameModeOptions, getQuestionCompetitiveOptions } from './hooks/typerOptions';
+import { GameMode, getDigitOptions, getGameModeOptions, getQuestionCompetitiveOptions, getRangeSuggestions } from './hooks/typerOptions';
 import { useDocumentTitle } from '../../hooks/useDocumentTitle';
 import { useTyper } from '../../components/typer/TyperProvider';
 import { subscribeToPreferences, getPreferences } from '../../hooks/preferences';
@@ -175,6 +175,7 @@ export default function CalculationPage() {
       min: 1,
       max: isTime ? 3600 : 1000,
       initialValue: String(isTime ? settings.timeLimitSeconds : settings.questionLimit),
+      suggestions: getRangeSuggestions(isTime ? settings.timeLimitSeconds : settings.questionLimit, settings.mode),
       onSubmit: (value) => {
         setSettings((prev) => ({
           ...prev,

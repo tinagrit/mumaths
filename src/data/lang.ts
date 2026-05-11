@@ -31,7 +31,8 @@ export const lang = {
   },
   typer: {
     TypeHerePlaceHolder: '> Type here',
-    SetToInput: 'Set to'
+    SetToInput: 'Set to',
+    Suggestions: 'Suggestions:'
   },
   gamemode: {
     ModeSmall: 'MODE',

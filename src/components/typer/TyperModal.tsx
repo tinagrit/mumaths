@@ -89,6 +89,16 @@ export default function TyperModal() {
     }
   };
 
+  const handleSuggestionSelect = (option: TyperListOption) => {
+    if (!displayedRequest || displayedRequest?.type !== 'input' || !displayedRequest.suggestions) return;
+
+    displayedRequest.onSubmit(Number(option.id));
+
+    if (!displayedRequest.keepTyperOnSelect) {
+      closeTyper();
+    }
+  }
+
   // err msg for bad input
   const getValidationError = () => {
     if (!displayedRequest || displayedRequest?.type !== 'input' || inputValue.trim() === '') return null;
@@ -166,23 +176,51 @@ export default function TyperModal() {
     const validationError = getValidationError();
     const hasTypedValue = inputValue.trim() !== '';
 
+    const suggestionsTitle = displayedRequest.suggestions ? (<p className="listlabel"><strong>{lang.typer.Suggestions}</strong></p>) : (<div></div>);
+
+    const suggestions = displayedRequest.suggestions ? displayedRequest.suggestions.map((option) => (
+      <div
+        className={`list${option.selected ? ' check active' : ''}${option.icon ? ' headingimg' : ''}`}
+        key={option.id}
+        onClick={() => handleSuggestionSelect(option)}
+        role="button"
+        tabIndex={0}
+        onKeyDown={(event) => {
+          if (event.key === 'Enter') {
+            handleListSelect(option);
+          }
+        }}
+      >
+        {option.icon ? <div className="svgcontainer">{option.icon}</div> : null}
+        <div>
+          {option.title ? <h1>{option.title}</h1> : null}
+          {option.description ? <p>{option.description}</p> : null}
+        </div>
+        {option.selected ? <CheckmarkIcon /> : null}
+      </div>
+    )) : (<div></div>);
+
     if (!hasTypedValue) {
-      return (
+      return (<div>
         <div className="list">
           <p>{displayedRequest.helperText ?? lang.gamemode.QuestionAsk}</p>
         </div>
-      );
+        {displayedRequest.suggestions ? suggestionsTitle : null}
+        {displayedRequest.suggestions ? suggestions : null}
+      </div>);
     }
 
     if (validationError) {
-      return (
+      return (<div>
         <div className="errlist">
           <em>{validationError}</em>
         </div>
-      );
+        {displayedRequest.suggestions ? suggestionsTitle : null}
+        {displayedRequest.suggestions ? suggestions : null}
+      </div>);
     }
 
-    return (
+    return (<div>
       <div 
         className="list" 
         role="button" 
@@ -199,7 +237,9 @@ export default function TyperModal() {
         </h1>
         {displayedRequest.helperText ? <p>{displayedRequest.helperText}</p> : null}
       </div>
-    );
+      {displayedRequest.suggestions ? suggestionsTitle : null}
+      {displayedRequest.suggestions ? suggestions : null}
+    </div>);
   };
 
   const topInputValue = displayedRequest ? (displayedRequest.type === 'input' ? inputValue : search) : '';

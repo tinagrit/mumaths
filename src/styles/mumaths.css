@@ -176,6 +176,11 @@ input[type=number] {
     cursor: pointer;
 }
 
+#typer #typercontent .listlabel {
+    padding: 30px 20px 10px 20px;
+    border-bottom: 2px solid rgba(var(--accent));
+}
+
 #typer #typercontent .list h1,
 #typer #typercontent .errlist h1 {
     font-size: 1.5em;

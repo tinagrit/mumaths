@@ -32,6 +32,24 @@ export const questionRangeCompetitiveOptions: DigitRangeOption[] = [
   { id: '50', label: `50`, searchTerms: ['50'] }
 ];
 
+export const questionRangeSuggestions: DigitRangeOption[] = [
+  { id: '5', label: `5`, searchTerms: ['5'] },
+  { id: '10', label: `10`, searchTerms: ['10'] },
+  { id: '15', label: `15`, searchTerms: ['15'] },
+  { id: '20', label: `20`, searchTerms: ['20'] },
+  { id: '30', label: `30`, searchTerms: ['30'] },
+  { id: '50', label: `50`, searchTerms: ['50'] },
+  { id: '100', label: `100`, searchTerms: ['100'] }
+];
+
+export const timeLimitRangeSuggestions: DigitRangeOption[] = [
+  { id: '15', label: `15`, searchTerms: ['15'] },
+  { id: '30', label: `30`, searchTerms: ['30'] },
+  { id: '60', label: `60`, searchTerms: ['60'] },
+  { id: '120', label: `120`, searchTerms: ['120'] },
+  { id: '300', label: `300`, searchTerms: ['300'] }
+];
+
 export const getGameModeOptions = (current: GameMode): TyperListOption[] => [
   {
     id: 'question',
@@ -95,3 +113,24 @@ export const getQuestionCompetitiveOptions = (current: number): TyperListOption[
     selected: Number(option.id) === current,
     searchTerms: option.searchTerms
   }));
+
+export const getRangeSuggestions = (current: number, mode: GameMode): TyperListOption[] => {
+  if (mode === "question") {
+    return questionRangeSuggestions.map((option) => ({
+      id: option.id,
+      title: undefined,
+      description: `${option.label} ${lang.gamemode.QuestionSuffixPlural}`.trim(),
+      selected: Number(option.id) === current,
+      searchTerms: option.searchTerms
+    }));
+  }
+
+  // otherwise return time options
+  return timeLimitRangeSuggestions.map((option) => ({
+    id: option.id,
+    title: undefined,
+    description: `${option.label}`.trim(),
+    selected: Number(option.id) === current,
+    searchTerms: option.searchTerms
+  }));
+}

@@ -24,6 +24,7 @@ export type TyperListRequest = {
 export type TyperInputRequest = {
   type: 'input';
   label: string;
+  keepTyperOnSelect?: boolean;
   helperText?: string;
   placeholder?: string;
   initialValue?: string;
@@ -32,6 +33,7 @@ export type TyperInputRequest = {
   min?: number;
   max?: number;
   unit?: string;
+  suggestions?: TyperListOption[];
   onSubmit: (value: number) => void;
 };
 
